@@ -174,7 +174,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Backend waitlist endpoints testing completed"
+    - "Re-test POST/GET waitlist with dedup (409), rate limit (429), and CSV export"
+    - "Verify UI polish: active nav, scroll-mt offsets, focus rings, demo padding, entrance animations"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
