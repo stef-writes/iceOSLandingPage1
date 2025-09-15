@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
@@ -8,7 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { AspectRatio } from "../components/ui/aspect-ratio";
 import { Toaster } from "../components/ui/sonner";
 import { toast } from "sonner";
-import { content, saveWaitlistEntry, getWaitlistEntries } from "../mock/mock";
+import { content } from "../mock/mock";
+import { createWaitlist } from "../lib/api";
+import { Link } from "react-router-dom";
 import {
   ArrowRight,
   Brain,
@@ -28,6 +30,7 @@ const Nav = () => {
           <span className="text-sm font-semibold tracking-wider text-white/90">iceOS</span>
         </a>
         <div className="hidden md:flex items-center gap-7 text-sm text-white/70">
+          <Link to="/philosophy" className="hover:text-white transition-colors">Philosophy</Link>
           <a href="#what" className="hover:text-white transition-colors">What</a>
           <a href="#why" className="hover:text-white transition-colors">Why</a>
           <a href="#cta" className="hover:text-white transition-colors">Early Access</a>
@@ -127,42 +130,32 @@ const WhyItMatters = () => (
   </section>
 );
 
-const useWaitlist = () => {
-  const existing = useMemo(() => getWaitlistEntries(), []);
-  const [submissions, setSubmissions] = useState(existing);
-
-  const submit = (payload) => {
-    const saved = saveWaitlistEntry(payload);
-    setSubmissions([saved, ...submissions]);
-    return saved;
-  };
-
-  return { submissions, submit };
-};
-
 const Waitlist = () => {
-  const { submit } = useWaitlist();
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [usecase, setUsecase] = useState("");
   const [saving, setSaving] = useState(false);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (!email) {
       toast.error("Please enter your email");
       return;
     }
-    setSaving(true);
-    const payload = { email, role, usecase };
-    setTimeout(() => {
-      submit(payload);
-      setSaving(false);
+    try {
+      setSaving(true);
+      const payload = { email, role: role || undefined, usecase: usecase || undefined };
+      await createWaitlist(payload);
       toast.success("You're on the list ✨");
       setEmail("");
       setRole("");
       setUsecase("");
-    }, 600);
+    } catch (err) {
+      const msg = err?.response?.data?.detail || "Something went wrong. Please try again.";
+      toast.error(String(msg));
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -225,7 +218,6 @@ const Waitlist = () => {
                 {saving ? "Joining…" : content.sections.finalCta.cta}
                 {!saving && <ArrowRight className="h-4 w-4 ml-1" />}
               </Button>
-              <p className="text-xs text-white/50">This is a frontend-only mock. Entries are stored locally on your browser.</p>
             </div>
           </form>
         </div>
@@ -244,6 +236,7 @@ const Footer = () => (
         <span>© {new Date().getFullYear()} iceOS</span>
       </div>
       <div className="flex items-center gap-4">
+        <Link to="/philosophy" className="hover:text-white">Philosophy</Link>
         <a href="#what" className="hover:text-white">What</a>
         <a href="#why" className="hover:text-white">Why</a>
         <a href="#cta" className="hover:text-white">Join</a>
