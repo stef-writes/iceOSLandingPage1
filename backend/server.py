@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, status
+from fastapi import FastAPI, APIRouter, HTTPException, status, Request
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -8,7 +8,8 @@ from pathlib import Path
 from pydantic import BaseModel, Field, EmailStr
 from typing import List, Optional
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
+from pymongo.errors import DuplicateKeyError
 
 
 ROOT_DIR = Path(__file__).parent
@@ -39,6 +40,7 @@ class WaitlistCreate(BaseModel):
     email: EmailStr
     role: Optional[str] = None
     usecase: Optional[str] = None
+    hp: Optional[str] = None  # honeypot field
 
 class WaitlistSubmission(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -46,6 +48,23 @@ class WaitlistSubmission(BaseModel):
     role: Optional[str] = None
     usecase: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+# -------------------- RATE LIMIT (simple) --------------------
+RATE_LIMIT_WINDOW = timedelta(minutes=1)
+RATE_LIMIT_MAX = 5
+rate_bucket = {}
+
+def is_rate_limited(ip: str) -> bool:
+    now = datetime.utcnow()
+    bucket = rate_bucket.get(ip, [])
+    # prune
+    bucket = [t for t in bucket if now - t < RATE_LIMIT_WINDOW]
+    allowed = len(bucket) < RATE_LIMIT_MAX
+    if allowed:
+        bucket.append(now)
+    rate_bucket[ip] = bucket
+    return not allowed
 
 
 # -------------------- ROUTES --------------------
@@ -68,15 +87,50 @@ async def get_status_checks():
 
 # Waitlist endpoints
 @api_router.post("/waitlist", response_model=WaitlistSubmission, status_code=status.HTTP_201_CREATED)
-async def create_waitlist(input: WaitlistCreate):
-    submission = WaitlistSubmission(**input.dict())
-    await db.waitlist.insert_one(submission.dict())
+async def create_waitlist(input: WaitlistCreate, request: Request):
+    # honeypot: if filled, pretend success but do nothing
+    if input.hp:
+        return WaitlistSubmission(email=input.email or "obfuscated@example.com")
+
+    # rate limit by IP
+    ip = request.client.host if request.client else "unknown"
+    if is_rate_limited(ip):
+        raise HTTPException(status_code=429, detail="Too many requests. Please try again shortly.")
+
+    submission = WaitlistSubmission(email=input.email, role=input.role, usecase=input.usecase)
+    try:
+        await db.waitlist.insert_one(submission.dict())
+    except DuplicateKeyError:
+        raise HTTPException(status_code=409, detail="You're already on the waitlist.")
     return submission
 
 @api_router.get("/waitlist", response_model=List[WaitlistSubmission])
 async def list_waitlist():
     docs = await db.waitlist.find().sort("created_at", -1).to_list(1000)
     return [WaitlistSubmission(**doc) for doc in docs]
+
+@api_router.get("/waitlist/export.csv")
+async def export_waitlist_csv():
+    from fastapi import Response
+    import csv
+    import io
+
+    docs = await db.waitlist.find().sort("created_at", -1).to_list(10000)
+    buffer = io.StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow(["id", "email", "role", "usecase", "created_at"])
+    for d in docs:
+        writer.writerow([
+            d.get("id"),
+            d.get("email"),
+            d.get("role", ""),
+            (d.get("usecase", "") or "").replace("\n", " "),
+            d.get("created_at").isoformat() if d.get("created_at") else "",
+        ])
+    csv_content = buffer.getvalue()
+    return Response(content=csv_content, media_type="text/csv", headers={
+        "Content-Disposition": "attachment; filename=waitlist.csv"
+    })
 
 
 # Include the router in the main app
@@ -96,6 +150,11 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+@app.on_event("startup")
+async def startup_tasks():
+    # ensure unique index on email
+    await db.waitlist.create_index("email", unique=True)
 
 @app.on_event("shutdown")
 async def shutdown_db_client():

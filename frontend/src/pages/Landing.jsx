@@ -10,7 +10,7 @@ import { Toaster } from "../components/ui/sonner";
 import { toast } from "sonner";
 import { content } from "../mock/mock";
 import { createWaitlist } from "../lib/api";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   ArrowRight,
   Brain,
@@ -20,6 +20,9 @@ import {
 } from "lucide-react";
 
 const Nav = () => {
+  const location = useLocation();
+  const isPhilosophy = location.pathname === "/philosophy";
+  const linkBase = "transition-colors hover:underline underline-offset-4 decoration-white/30";
   return (
     <div className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-[rgba(10,12,14,0.5)] border-b border-white/10">
       <div className="mx-auto max-w-7xl px-6 py-3 flex items-center justify-between">
@@ -30,14 +33,14 @@ const Nav = () => {
           <span className="text-sm font-semibold tracking-wider text-white/90">iceOS</span>
         </a>
         <div className="hidden md:flex items-center gap-7 text-sm text-white/70">
-          <Link to="/philosophy" className="hover:text-white transition-colors">Philosophy</Link>
-          <a href="#what" className="hover:text-white transition-colors">What</a>
-          <a href="#why" className="hover:text-white transition-colors">Why</a>
-          <a href="#cta" className="hover:text-white transition-colors">Early Access</a>
+          <Link to="/philosophy" className={`${linkBase} ${isPhilosophy ? "text-white" : "hover:text-white"}`}>Philosophy</Link>
+          <a href="#what" className={`${linkBase} hover:text-white`}>What</a>
+          <a href="#why" className={`${linkBase} hover:text-white`}>Why</a>
+          <a href="#cta" className={`${linkBase} hover:text-white`}>Early Access</a>
         </div>
         <div className="flex items-center gap-3">
           <a href="#cta">
-            <Button className="h-9 px-4 bg-cyan-500 text-white hover:bg-cyan-400 shadow-[0_8px_30px_rgba(34,211,238,0.25)]">
+            <Button className="h-9 px-4 bg-cyan-500 text-white hover:bg-cyan-400 shadow-[0_8px_30px_rgba(34,211,238,0.25)] focus-visible:ring-cyan-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0b0d0e]">
               Join Waitlist
             </Button>
           </a>
@@ -49,7 +52,7 @@ const Nav = () => {
 
 const Hero = () => {
   return (
-    <section id="top" className="relative pt-28 md:pt-32 pb-8 md:pb-10">
+    <section id="top" className="relative pt-28 md:pt-32 pb-10 motion-safe:animate-fade-in-up">
       {/* Decorative layers */}
       <div className="absolute inset-0 -z-10">
         <div className="pointer-events-none absolute -top-24 right-0 h-80 w-80 rounded-full blur-3xl bg-cyan-400/20" />
@@ -72,7 +75,7 @@ const Hero = () => {
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
             <a href="#cta">
-              <Button className="group h-11 px-5 bg-cyan-500 hover:bg-cyan-400 text-white shadow-[0_8px_30px_rgba(34,211,238,0.25)]">
+              <Button className="group h-11 px-5 bg-cyan-500 hover:bg-cyan-400 text-white shadow-[0_8px_30px_rgba(34,211,238,0.25)] focus-visible:ring-cyan-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0b0d0e]">
                 {content.sections.hero.cta}
                 <ArrowRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-0.5" />
               </Button>
@@ -85,16 +88,16 @@ const Hero = () => {
 };
 
 const Demo = () => (
-  <section id="demo" className="py-8 md:py-10">
+  <section id="demo" className="py-10 motion-safe:animate-fade-in-up scroll-mt-24">
     <div className="mx-auto max-w-7xl px-6">
       <Card className="bg-white/5 border-white/10 backdrop-blur-2xl">
-        <CardHeader className="flex flex-row items-center justify-between py-4 md:py-5">
+        <CardHeader className="flex flex-row items-center justify-between p-6">
           <CardTitle className="text-white/90 flex items-center gap-2">
             <Play className="h-4 w-4 text-cyan-300" /> {content.sections.demo.title}
             <span className="ml-2 text-xs text-white/50">{content.sections.demo.status.replace('-', ' ')}</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="pb-4 md:pb-6">
+        <CardContent className="pb-6 px-6">
           <AspectRatio ratio={16/9}>
             <div className="w-full h-full grid place-items-center rounded-lg border border-white/10 bg-gradient-to-b from-white/5 to-transparent text-white/70">
               {content.sections.demo.note}
@@ -107,7 +110,7 @@ const Demo = () => (
 );
 
 const WhatItIs = () => (
-  <section id="what" className="pt-10 md:pt-12 pb-8 md:pb-10">
+  <section id="what" className="py-10 scroll-mt-24">
     <div className="mx-auto max-w-7xl px-6">
       <h2 className="text-2xl md:text-3xl font-semibold text-white">{content.sections.what.title}</h2>
       <p className="mt-3 text-white/70 max-w-3xl leading-relaxed">{content.sections.what.copy}</p>
@@ -116,7 +119,7 @@ const WhatItIs = () => (
 );
 
 const WhyItMatters = () => (
-  <section id="why" className="pt-8 md:pt-10 pb-8 md:pb-10">
+  <section id="why" className="py-10 scroll-mt-24">
     <div className="mx-auto max-w-7xl px-6">
       <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 backdrop-blur-xl text-xs text-white/70">
         {content.sections.why.eyebrow}
@@ -134,6 +137,7 @@ const Waitlist = () => {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [usecase, setUsecase] = useState("");
+  const [hp, setHp] = useState(""); // honeypot
   const [saving, setSaving] = useState(false);
 
   const onSubmit = async (e) => {
@@ -144,14 +148,16 @@ const Waitlist = () => {
     }
     try {
       setSaving(true);
-      const payload = { email, role: role || undefined, usecase: usecase || undefined };
+      const payload = { email, role: role || undefined, usecase: usecase || undefined, hp: hp || undefined };
       await createWaitlist(payload);
       toast.success("You're on the list ✨");
       setEmail("");
       setRole("");
       setUsecase("");
+      setHp("");
     } catch (err) {
-      const msg = err?.response?.data?.detail || "Something went wrong. Please try again.";
+      const status = err?.response?.status;
+      const msg = status === 409 ? "You're already on the list." : (err?.response?.data?.detail || "Something went wrong. Please try again.");
       toast.error(String(msg));
     } finally {
       setSaving(false);
@@ -159,14 +165,15 @@ const Waitlist = () => {
   };
 
   return (
-    <section id="cta" className="pt-10 md:pt-12 pb-14 md:pb-16">
+    <section id="cta" className="py-10 scroll-mt-24">
       <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-10 items-start">
         <div>
           <h3 className="text-2xl md:text-3xl font-semibold text-white">{content.sections.finalCta.title}</h3>
           <p className="mt-4 text-white/70 leading-relaxed max-w-2xl">{content.sections.finalCta.copy}</p>
         </div>
         <div>
-          <form onSubmit={onSubmit} className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-2xl p-5">
+          <form onSubmit={onSubmit} className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-2xl p-6">
+            <input type="text" value={hp} onChange={(e)=>setHp(e.target.value)} className="hidden" aria-hidden="true" tabIndex="-1" autoComplete="off" />
             <div className="grid gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="email" className="text-white/80">Email</Label>
@@ -178,14 +185,14 @@ const Waitlist = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@company.com"
-                    className="pl-9 bg-black/40 border-white/10 text-white placeholder:text-white/40 focus-visible:ring-cyan-400"
+                    className="pl-9 bg-black/40 border-white/10 text-white placeholder:text-white/40 focus-visible:ring-cyan-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0b0d0e]"
                   />
                 </div>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="role" className="text-white/80">Role</Label>
                 <Select value={role} onValueChange={setRole}>
-                  <SelectTrigger id="role" className="bg-black/40 border-white/10 text-white">
+                  <SelectTrigger id="role" className="bg-black/40 border-white/10 text-white focus-visible:ring-cyan-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0b0d0e]">
                     <SelectValue placeholder="Select a role" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#0b0d0e] text-white border-white/10">
@@ -208,13 +215,13 @@ const Waitlist = () => {
                   value={usecase}
                   onChange={(e) => setUsecase(e.target.value)}
                   placeholder="Briefly describe your system or judgment you want to scale"
-                  className="min-h-[96px] bg-black/40 border-white/10 text-white placeholder:text-white/40 focus-visible:ring-cyan-400"
+                  className="min-h-[96px] bg-black/40 border-white/10 text-white placeholder:text-white/40 focus-visible:ring-cyan-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0b0d0e]"
                 />
               </div>
               <Button
                 type="submit"
                 disabled={saving}
-                className="h-11 bg-cyan-500 hover:bg-cyan-400 text-white shadow-[0_8px_30px_rgba(34,211,238,0.25)]">
+                className="h-11 bg-cyan-500 hover:bg-cyan-400 text-white shadow-[0_8px_30px_rgba(34,211,238,0.25)] focus-visible:ring-cyan-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0b0d0e]">
                 {saving ? "Joining…" : content.sections.finalCta.cta}
                 {!saving && <ArrowRight className="h-4 w-4 ml-1" />}
               </Button>
@@ -236,10 +243,10 @@ const Footer = () => (
         <span>© {new Date().getFullYear()} iceOS</span>
       </div>
       <div className="flex items-center gap-4">
-        <Link to="/philosophy" className="hover:text-white">Philosophy</Link>
-        <a href="#what" className="hover:text-white">What</a>
-        <a href="#why" className="hover:text-white">Why</a>
-        <a href="#cta" className="hover:text-white">Join</a>
+        <Link to="/philosophy" className="transition-colors hover:underline underline-offset-4 decoration-white/30 hover:text-white">Philosophy</Link>
+        <a href="#what" className="transition-colors hover:underline underline-offset-4 decoration-white/30 hover:text-white">What</a>
+        <a href="#why" className="transition-colors hover:underline underline-offset-4 decoration-white/30 hover:text-white">Why</a>
+        <a href="#cta" className="transition-colors hover:underline underline-offset-4 decoration-white/30 hover:text-white">Join</a>
       </div>
     </div>
   </footer>

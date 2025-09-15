@@ -1,11 +1,11 @@
-# API Contracts and Integration Plan
+# API Contracts and Integration Plan (Updated)
 
-Scope: Replace mock waitlist with real backend + add Philosophy page (static).
+Scope: Real waitlist + small UX polish + export + basic abuse protection. Supabase-ready later via adapter.
 
-Frontend uses process.env.REACT_APP_BACKEND_URL and MUST prefix all routes with /api.
-Backend uses os.environ['MONGO_URL'] and os.environ['DB_NAME'].
+Frontend base URL: process.env.REACT_APP_BACKEND_URL (never hardcode) with "/api" prefix.
+Backend DB: uses os.environ['MONGO_URL'] + DB_NAME; unique index on waitlist.email.
 
-Entities
+Entity
 - WaitlistSubmission
   - id: string (uuid)
   - email: string (Email)
@@ -13,30 +13,27 @@ Entities
   - usecase: string | null
   - created_at: ISO string (UTC)
 
-Endpoints (FastAPI, prefixed with /api)
-1) POST /api/waitlist
-   - Req: { email: Email, role?: string, usecase?: string }
-   - Res: 201 { id, email, role, usecase, created_at }
-   - Errors: 422 (validation)
+Endpoints
+- POST /api/waitlist
+  - Req: { email: Email, role?: string, usecase?: string, hp?: string }
+  - Honeypot: if hp non-empty, server ignores and returns success-shaped object
+  - Rate limit: basic per-IP (5/min) -> 429
+  - Dedup: unique index on email -> 409 with detail "You're already on the waitlist."
+  - Res: 201 { id, email, role, usecase, created_at }
 
-2) GET /api/waitlist
-   - Res: 200 Array<WaitlistSubmission>
-   - Notes: for internal/admin use; simple list (no auth yet)
+- GET /api/waitlist
+  - Res: 200 Array<WaitlistSubmission>, newest first
+
+- GET /api/waitlist/export.csv
+  - Res: 200 text/csv; header row included
 
 Frontend Integration
-- File: src/lib/api.js
-  - API_BASE = `${process.env.REACT_APP_BACKEND_URL}/api`
-  - createWaitlist(payload) -> POST /waitlist
+- src/lib/api.js -> createWaitlist(payload)
+- Landing form includes hidden honeypot input; displays friendly 409 message.
 
-Migration from Mock
-- Removed localStorage usage on submit; toast confirms server result
-- UI unchanged: Email, Role, Use-case
+Supabase Future Plan
+- Swap persistence via STORAGE_DRIVER (supabase|mongo) with same API; table schema
+  waitlist(id uuid pk, email text unique not null, role text, usecase text, created_at timestamptz default now()).
 
-Philosophy Page
-- Route: /philosophy (static content)
-- No backend calls
-
-Testing Plan
-- Backend first via deep_testing_backend_v2
-- Verify POST + GET
-- Then optionally run automated UI tests on waitlist flow if user requests
+Testing
+- Backend tested already; after these updates, retest POST/GET and duplicate/429.
