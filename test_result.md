@@ -218,7 +218,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Rate limiting infrastructure fix (X-Forwarded-For header support)"
+    - "Automated frontend tests for waitlist form: empty email error, valid submission success toast, duplicate submission toast, role select interaction, keyboard navigation"
   stuck_tasks:
     - "Rate limiting (429 after 5 requests)"
   test_all: false
