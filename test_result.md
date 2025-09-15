@@ -132,6 +132,50 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ TESTED: GET /api/waitlist works correctly. Returns array with entries sorted by most recent first (created_at desc). Successfully retrieved test entries with proper structure."
+  - task: "Duplicate email protection (409 error)"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: Duplicate email protection working correctly. First POST with 'dupe@test.com' returns 201, second POST with same email returns 409 with proper detail message 'You're already on the waitlist.'"
+  - task: "Rate limiting (429 after 5 requests)"
+    implemented: true
+    working: false
+    file: "/app/backend/server.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "⚠️ INFRASTRUCTURE LIMITATION: Rate limiting code is implemented correctly but not working in Kubernetes environment. Each request appears to come from different proxy IPs (10.64.x.x), bypassing IP-based rate limiting. Backend uses request.client.host which shows proxy IP, not real client IP. Needs X-Forwarded-For header support to get real client IP behind Kubernetes ingress."
+  - task: "Honeypot protection"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: Honeypot protection working correctly. POST with hp='httpbot' returns 201-like success but does not create real row. Verified GET /api/waitlist does not include honeypot email."
+  - task: "CSV export endpoint"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: GET /api/waitlist/export.csv working correctly. Returns proper CSV with text/csv content-type, attachment disposition header, and all expected columns (id, email, role, usecase, created_at). Contains proper header row and data rows."
 frontend:
   - task: "Landing page trimmed layout"
     implemented: true
