@@ -372,11 +372,17 @@ def main():
     
     test_results = []
     
-    # Run all tests
+    # Run basic tests first
     test_results.append(("POST valid payloads", test_waitlist_post_valid_payloads()))
     test_results.append(("POST invalid email", test_waitlist_post_invalid_email()))
     test_results.append(("GET waitlist", test_waitlist_get()))
     test_results.append(("CORS preflight", test_cors_preflight()))
+    
+    # Run hardening tests
+    test_results.append(("Duplicate email protection (409)", test_duplicate_email_protection()))
+    test_results.append(("Rate limiting (429)", test_rate_limiting()))
+    test_results.append(("Honeypot protection", test_honeypot_protection()))
+    test_results.append(("CSV export", test_csv_export()))
     
     # Summary
     print("\n" + "=" * 60)
