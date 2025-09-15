@@ -106,26 +106,32 @@ user_problem_statement: "Build iceOS pre-launch site; add Philosophy page; repla
 backend:
   - task: "Waitlist POST endpoint"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: true
         agent: "main"
         comment: "Implemented POST /api/waitlist storing to Mongo."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: POST /api/waitlist works correctly. Valid payloads (full and minimal) return 201 with proper JSON response containing id, email, created_at. Invalid email properly rejected with 422. CORS preflight OPTIONS request successful with proper headers."
   - task: "Waitlist GET endpoint"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: true
         agent: "main"
         comment: "Implemented GET /api/waitlist (sorted desc)."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: GET /api/waitlist works correctly. Returns array with entries sorted by most recent first (created_at desc). Successfully retrieved test entries with proper structure."
 frontend:
   - task: "Landing page trimmed layout"
     implemented: true
