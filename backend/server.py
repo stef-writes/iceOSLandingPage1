@@ -1,12 +1,12 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException, status
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field
-from typing import List
+from pydantic import BaseModel, Field, EmailStr
+from typing import List, Optional
 import uuid
 from datetime import datetime
 
@@ -26,7 +26,7 @@ app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
 
-# Define Models
+# -------------------- MODELS --------------------
 class StatusCheck(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     client_name: str
@@ -35,11 +35,25 @@ class StatusCheck(BaseModel):
 class StatusCheckCreate(BaseModel):
     client_name: str
 
-# Add your routes to the router instead of directly to app
+class WaitlistCreate(BaseModel):
+    email: EmailStr
+    role: Optional[str] = None
+    usecase: Optional[str] = None
+
+class WaitlistSubmission(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    email: EmailStr
+    role: Optional[str] = None
+    usecase: Optional[str] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+# -------------------- ROUTES --------------------
 @api_router.get("/")
 async def root():
     return {"message": "Hello World"}
 
+# Health/Status sample routes (kept)
 @api_router.post("/status", response_model=StatusCheck)
 async def create_status_check(input: StatusCheckCreate):
     status_dict = input.dict()
@@ -52,13 +66,26 @@ async def get_status_checks():
     status_checks = await db.status_checks.find().to_list(1000)
     return [StatusCheck(**status_check) for status_check in status_checks]
 
+# Waitlist endpoints
+@api_router.post("/waitlist", response_model=WaitlistSubmission, status_code=status.HTTP_201_CREATED)
+async def create_waitlist(input: WaitlistCreate):
+    submission = WaitlistSubmission(**input.dict())
+    await db.waitlist.insert_one(submission.dict())
+    return submission
+
+@api_router.get("/waitlist", response_model=List[WaitlistSubmission])
+async def list_waitlist():
+    docs = await db.waitlist.find().sort("created_at", -1).to_list(1000)
+    return [WaitlistSubmission(**doc) for doc in docs]
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
