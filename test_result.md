@@ -201,15 +201,18 @@ frontend:
         comment: "Static content and nav link added."
   - task: "Frontend API integration for waitlist"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/lib/api.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: true
         agent: "main"
         comment: "Wired createWaitlist to form; uses env REACT_APP_BACKEND_URL with /api prefix."
+      - working: true
+        agent: "testing"
+        comment: "✅ COMPREHENSIVE UI TESTING COMPLETE: All 6 requested test scenarios PASSED successfully. (1) Empty email submission shows correct error toast 'Please enter your email'. (2) Valid submission with unique email shows success toast 'You're on the list ✨' and clears all form fields. (3) Duplicate email submission shows correct error toast 'You're already on the list.' (4) Role select interaction works perfectly - dropdown opens, Engineer option selectable, trigger displays 'Engineer' correctly. (5) Keyboard navigation works - Tab key navigates through email→role→usecase→submit button, focus ring visible on submit button, Enter key submission works. (6) Navigation to Philosophy page works, active state displays correctly, navigation back to home successful. Frontend-backend integration working flawlessly with proper error handling and user feedback."
 metadata:
   created_by: "main_agent"
   version: "1.0"
