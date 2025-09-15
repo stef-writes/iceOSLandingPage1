@@ -13,17 +13,11 @@ import { toast } from "sonner";
 import { content, saveWaitlistEntry, getWaitlistEntries } from "../mock/mock";
 import {
   ArrowRight,
-  Boxes,
-  GitBranch,
-  Network,
   Brain,
   Zap,
   ShieldCheck,
   Mail,
-  User,
 } from "lucide-react";
-
-const iconMap = { Boxes, GitBranch, Network };
 
 const Nav = () => {
   return (
@@ -96,20 +90,6 @@ const Hero = () => {
   );
 };
 
-const PillarCard = ({ title, desc, Icon }) => (
-  <Card className="bg-white/5 border-white/10 backdrop-blur-2xl hover:bg-white/7 transition-colors">
-    <CardHeader className="flex-row items-center gap-3">
-      <div className="h-9 w-9 rounded-md bg-cyan-400/15 border border-cyan-300/30 grid place-items-center text-cyan-300">
-        <Icon className="h-4 w-4" />
-      </div>
-      <CardTitle className="text-white font-semibold">{title}</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <p className="text-white/70 text-sm leading-relaxed">{desc}</p>
-    </CardContent>
-  </Card>
-);
-
 const Building = () => {
   return (
     <section id="building" className="relative py-10 md:py-16">
@@ -119,11 +99,10 @@ const Building = () => {
           <p className="mt-2 text-white/70">{content.sections.building.lead}</p>
           <p className="mt-3 text-white/60 max-w-2xl">{content.sections.building.copy}</p>
         </div>
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
-          {content.sections.building.pillars.map((p) => {
-            const Ico = iconMap[p.icon] || Boxes;
-            return <PillarCard key={p.title} title={p.title} desc={p.desc} Icon={Ico} />;
-          })}
+        <div className="mt-6 flex flex-wrap gap-2">
+          {content.sections.building.hints.map((h) => (
+            <Badge key={h} className="bg-white/5 text-white border border-white/10">{h}</Badge>
+          ))}
         </div>
       </div>
     </section>
@@ -136,23 +115,21 @@ const WhyMatters = () => (
       <div>
         <h3 className="text-2xl md:text-3xl font-semibold text-white">{content.sections.matters.title}</h3>
         <p className="mt-4 text-white/70 leading-relaxed">{content.sections.matters.copy}</p>
+        <p className="mt-5 text-white/80 font-medium">Key principles:</p>
+        <ul className="mt-2 space-y-2">
+          {content.sections.matters.principles.map((p) => (
+            <li key={p.title} className="flex items-start gap-2 text-white/80">
+              <ShieldCheck className="h-4 w-4 text-teal-300 mt-0.5" />
+              <span><span className="font-semibold text-white">{p.title}:</span> {p.desc}</span>
+            </li>
+          ))}
+        </ul>
       </div>
       <div>
         <Card className="bg-white/5 border-white/10 backdrop-blur-2xl">
           <CardContent className="pt-6 text-white/80 text-sm leading-relaxed">
-            <div className="flex items-center gap-2 text-white/70">
-              <ShieldCheck className="h-4 w-4 text-teal-300" />
-              Reproducible
-            </div>
-            <Separator className="my-3 bg-white/10" />
-            <div className="flex items-center gap-2 text-white/70">
-              <GitBranch className="h-4 w-4 text-cyan-300" />
-              Composable
-            </div>
-            <Separator className="my-3 bg-white/10" />
-            <div className="flex items-center gap-2 text-white/70">
-              <Zap className="h-4 w-4 text-cyan-200" />
-              Testable
+            <div className="rounded-lg border border-white/10 p-4 bg-white/5">
+              <p className="text-white/80">Make what works for you legible, durable, and composable — so it survives handoffs and compounds.</p>
             </div>
           </CardContent>
         </Card>
@@ -193,14 +170,7 @@ const WhyNow = () => (
           <div className="flex items-start gap-3 text-white/80">
             <Brain className="h-5 w-5 text-cyan-300 mt-0.5" />
             <p className="text-sm leading-relaxed">
-              Encode judgment once, run it everywhere. Treat expertise as software — versioned, tested, and deployed.
-            </p>
-          </div>
-          <Separator className="my-4 bg-white/10" />
-          <div className="flex items-start gap-3 text-white/80">
-            <Network className="h-5 w-5 text-teal-300 mt-0.5" />
-            <p className="text-sm leading-relaxed">
-              Integrate across surfaces: ops dashboards, internal tools, products, and more.
+              Treat expertise as infrastructure: legible, versioned, and deployable across dashboards, tools, and products.
             </p>
           </div>
         </div>

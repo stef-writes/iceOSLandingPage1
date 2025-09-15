@@ -15,43 +15,41 @@ export const content = {
       title: "What We’re Building",
       lead: "Expertise → Infrastructure",
       copy:
-        "iceOS turns expertise into modular building blocks — nodes, workflows, networks — that run your judgment at scale. Build once, reason everywhere.",
-      pillars: [
-        {
-          title: "Nodes",
-          desc: "Atomic units of judgment: reusable, testable, composable.",
-          icon: "Boxes",
-        },
-        {
-          title: "Workflows",
-          desc: "Chain nodes into repeatable systems that encode expertise.",
-          icon: "GitBranch",
-        },
-        {
-          title: "Networks",
-          desc: "Distribute reasoning across teams and surfaces with control.",
-          icon: "Network",
-        },
-      ],
+        "iceOS turns expertise into modular, reusable systems that run your thinking at scale. Build once, apply everywhere.",
+      hints: ["Modular", "Reusable", "Leverage"],
     },
     matters: {
       title: "Why This Matters",
       copy:
-        "Knowledge is stuck. Expert judgment is trapped in heads, docs, and Slack threads — expensive to access, impossible to scale. iceOS makes it reproducible, testable, and composable — so individuals and teams can move faster than ever.",
+        "Expertise is illegible and under-leveraged. Right now, what makes you effective lives in your head, in scattered docs, or in threads no one will ever read again. iceOS makes expertise durable, testable, and composable — so it can survive handoffs, power new contexts, and compound over time.",
+      principles: [
+        {
+          title: "Reproducible",
+          desc: "The same decision works the same way, every time.",
+        },
+        {
+          title: "Composable",
+          desc: "Insights combine into bigger, better systems.",
+        },
+        {
+          title: "Testable",
+          desc: "Audit, version, and improve as you go.",
+        },
+      ],
     },
     audience: {
       title: "Who It’s For",
       chips: ["Creators", "Operators", "System Designers"],
       bullets: [
-        "Creators: Productize thinking, monetize systems.",
-        "Operators: Scale good decisions, cut cognitive drag.",
-        "Designers: Encode higher-order reasoning, push AI forward.",
+        "Creators: Productize thinking. Build once, monetize everywhere.",
+        "Operators: Scale good decisions, cut cognitive drag, move faster.",
+        "Designers: Encode meta-thinking, build higher-order reasoning engines.",
       ],
     },
     whyNow: {
       title: "Why Now",
       copy:
-        "The creator economy is maturing. AI has made creativity abundant — but judgment is still scarce. Whoever captures and scales judgment wins the next decade.",
+        "The creator economy is maturing — but expertise is still brittle, invisible, and hard to scale. AI has made generation cheap, but reasoning remains the bottleneck. iceOS makes expertise legible and deployable — turning hard-won judgment into infrastructure that runs across dashboards, tools, and products.",
     },
     finalCta: {
       title: "Shape the future of intelligence.",
