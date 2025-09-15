@@ -174,6 +174,197 @@ def test_cors_preflight():
             print(f"❌ Unexpected status code: {response.status_code}")
         return False
 
+def test_duplicate_email_protection():
+    """Test duplicate email protection (409 error)"""
+    print("\n" + "=" * 60)
+    print("Testing duplicate email protection")
+    print("=" * 60)
+    
+    test_email = "dupe@test.com"
+    payload = {"email": test_email}
+    
+    # First POST should succeed (201)
+    print(f"First POST with email: {test_email}")
+    response1 = requests.post(f"{API_BASE}/waitlist", json=payload)
+    print(f"Status Code: {response1.status_code}")
+    print(f"Response: {response1.text}")
+    
+    if response1.status_code != 201:
+        print(f"❌ First POST failed - Expected 201, got {response1.status_code}")
+        return False
+    
+    print("✅ First POST successful")
+    
+    # Second POST with same email should fail (409)
+    print(f"\nSecond POST with same email: {test_email}")
+    response2 = requests.post(f"{API_BASE}/waitlist", json=payload)
+    print(f"Status Code: {response2.status_code}")
+    print(f"Response: {response2.text}")
+    
+    if response2.status_code == 409:
+        try:
+            error_data = response2.json()
+            if "detail" in error_data and "already on the waitlist" in error_data["detail"]:
+                print("✅ Duplicate email correctly rejected with 409 and proper detail message")
+                return True
+            else:
+                print(f"❌ 409 returned but detail message incorrect: {error_data}")
+                return False
+        except:
+            print("❌ 409 returned but response is not valid JSON")
+            return False
+    else:
+        print(f"❌ Expected 409 for duplicate email, got {response2.status_code}")
+        return False
+
+def test_rate_limiting():
+    """Test rate limiting (429 after 5 requests)"""
+    print("\n" + "=" * 60)
+    print("Testing rate limiting (max 5 requests per minute)")
+    print("=" * 60)
+    
+    import time
+    
+    # Send 6 requests rapidly
+    success_count = 0
+    rate_limited = False
+    
+    for i in range(6):
+        payload = {"email": f"ratetest{i}@test.com"}
+        print(f"Request {i+1}: {payload['email']}")
+        
+        response = requests.post(f"{API_BASE}/waitlist", json=payload)
+        print(f"  Status Code: {response.status_code}")
+        
+        if response.status_code == 201:
+            success_count += 1
+            print(f"  ✅ Success #{success_count}")
+        elif response.status_code == 429:
+            print(f"  🛑 Rate limited (429)")
+            rate_limited = True
+            try:
+                error_data = response.json()
+                print(f"  Detail: {error_data.get('detail', 'No detail')}")
+            except:
+                print(f"  Response: {response.text}")
+        else:
+            print(f"  ❌ Unexpected status: {response.status_code}")
+            print(f"  Response: {response.text}")
+        
+        # Small delay between requests
+        time.sleep(0.1)
+    
+    print(f"\nResults: {success_count} successful requests, Rate limited: {rate_limited}")
+    
+    # Should have exactly 5 successes and then rate limiting
+    if success_count == 5 and rate_limited:
+        print("✅ Rate limiting working correctly (5 successes, then 429)")
+        return True
+    else:
+        print(f"❌ Rate limiting not working as expected. Expected 5 successes + rate limit, got {success_count} successes, rate_limited={rate_limited}")
+        return False
+
+def test_honeypot_protection():
+    """Test honeypot protection"""
+    print("\n" + "=" * 60)
+    print("Testing honeypot protection")
+    print("=" * 60)
+    
+    honeypot_email = "honeypot@test.com"
+    payload = {
+        "email": honeypot_email,
+        "hp": "httpbot"  # honeypot field filled
+    }
+    
+    print(f"POST with honeypot field: {payload}")
+    response = requests.post(f"{API_BASE}/waitlist", json=payload)
+    print(f"Status Code: {response.status_code}")
+    print(f"Response: {response.text}")
+    
+    # Should return 201-like success
+    if response.status_code != 201:
+        print(f"❌ Honeypot request should return 201, got {response.status_code}")
+        return False
+    
+    print("✅ Honeypot request returned 201 (fake success)")
+    
+    # Now verify the email is NOT in the actual waitlist
+    print("\nVerifying honeypot email is not in real waitlist...")
+    get_response = requests.get(f"{API_BASE}/waitlist")
+    
+    if get_response.status_code != 200:
+        print(f"❌ Failed to get waitlist: {get_response.status_code}")
+        return False
+    
+    waitlist_data = get_response.json()
+    honeypot_found = any(entry.get("email") == honeypot_email for entry in waitlist_data)
+    
+    if not honeypot_found:
+        print("✅ Honeypot email correctly NOT found in real waitlist")
+        return True
+    else:
+        print("❌ Honeypot email found in real waitlist - honeypot protection failed")
+        return False
+
+def test_csv_export():
+    """Test CSV export endpoint"""
+    print("\n" + "=" * 60)
+    print("Testing CSV export endpoint")
+    print("=" * 60)
+    
+    response = requests.get(f"{API_BASE}/waitlist/export.csv")
+    print(f"Status Code: {response.status_code}")
+    print(f"Content-Type: {response.headers.get('content-type', 'Not set')}")
+    print(f"Content-Disposition: {response.headers.get('content-disposition', 'Not set')}")
+    
+    if response.status_code != 200:
+        print(f"❌ CSV export failed with status {response.status_code}")
+        print(f"Response: {response.text}")
+        return False
+    
+    # Check content type
+    if "text/csv" not in response.headers.get('content-type', ''):
+        print(f"❌ Wrong content type. Expected text/csv, got {response.headers.get('content-type')}")
+        return False
+    
+    # Check content disposition
+    if "attachment" not in response.headers.get('content-disposition', ''):
+        print(f"❌ Missing attachment disposition header")
+        return False
+    
+    # Check CSV content
+    csv_content = response.text
+    lines = csv_content.strip().split('\n')
+    
+    if len(lines) < 1:
+        print("❌ CSV is empty")
+        return False
+    
+    # Check header
+    header = lines[0]
+    expected_columns = ["id", "email", "role", "usecase", "created_at"]
+    
+    print(f"CSV Header: {header}")
+    print(f"CSV Lines: {len(lines)}")
+    
+    # Verify header contains expected columns
+    for col in expected_columns:
+        if col not in header:
+            print(f"❌ Missing column '{col}' in CSV header")
+            return False
+    
+    print("✅ CSV export working correctly")
+    print(f"  - Proper content type: text/csv")
+    print(f"  - Proper headers with all expected columns")
+    print(f"  - Contains {len(lines)} lines (including header)")
+    
+    # Show first few lines for verification
+    print("First few lines of CSV:")
+    for i, line in enumerate(lines[:3]):
+        print(f"  {i+1}: {line}")
+    
+    return True
+
 def main():
     """Run all tests"""
     print(f"Testing backend API at: {API_BASE}")
