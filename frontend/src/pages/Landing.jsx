@@ -46,7 +46,7 @@ const Nav = () => {
 
 const Hero = () => {
   return (
-    <section id="top" className="relative pt-28 md:pt-32 pb-10 md:pb-16">
+    <section id="top" className="relative pt-28 md:pt-32 pb-8 md:pb-10">
       {/* Decorative layers */}
       <div className="absolute inset-0 -z-10">
         <div className="pointer-events-none absolute -top-24 right-0 h-80 w-80 rounded-full blur-3xl bg-cyan-400/20" />
@@ -81,8 +81,30 @@ const Hero = () => {
   );
 };
 
+const Demo = () => (
+  <section id="demo" className="py-8 md:py-10">
+    <div className="mx-auto max-w-7xl px-6">
+      <Card className="bg-white/5 border-white/10 backdrop-blur-2xl">
+        <CardHeader className="flex flex-row items-center justify-between py-4 md:py-5">
+          <CardTitle className="text-white/90 flex items-center gap-2">
+            <Play className="h-4 w-4 text-cyan-300" /> {content.sections.demo.title}
+            <span className="ml-2 text-xs text-white/50">{content.sections.demo.status.replace('-', ' ')}</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pb-4 md:pb-6">
+          <AspectRatio ratio={16/9}>
+            <div className="w-full h-full grid place-items-center rounded-lg border border-white/10 bg-gradient-to-b from-white/5 to-transparent text-white/70">
+              {content.sections.demo.note}
+            </div>
+          </AspectRatio>
+        </CardContent>
+      </Card>
+    </div>
+  </section>
+);
+
 const WhatItIs = () => (
-  <section id="what" className="relative py-10 md:py-16">
+  <section id="what" className="pt-10 md:pt-12 pb-8 md:pb-10">
     <div className="mx-auto max-w-7xl px-6">
       <h2 className="text-2xl md:text-3xl font-semibold text-white">{content.sections.what.title}</h2>
       <p className="mt-3 text-white/70 max-w-3xl leading-relaxed">{content.sections.what.copy}</p>
@@ -91,7 +113,7 @@ const WhatItIs = () => (
 );
 
 const WhyItMatters = () => (
-  <section id="why" className="relative py-10 md:py-16">
+  <section id="why" className="pt-8 md:pt-10 pb-8 md:pb-10">
     <div className="mx-auto max-w-7xl px-6">
       <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 backdrop-blur-xl text-xs text-white/70">
         {content.sections.why.eyebrow}
@@ -144,7 +166,7 @@ const Waitlist = () => {
   };
 
   return (
-    <section id="cta" className="py-12 md:py-16">
+    <section id="cta" className="pt-10 md:pt-12 pb-14 md:pb-16">
       <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-10 items-start">
         <div>
           <h3 className="text-2xl md:text-3xl font-semibold text-white">{content.sections.finalCta.title}</h3>
@@ -208,24 +230,6 @@ const Waitlist = () => {
           </form>
         </div>
       </div>
-
-      {/* Demo section */}
-      <div className="mx-auto max-w-7xl px-6 mt-10">
-        <Card className="bg-white/5 border-white/10 backdrop-blur-2xl">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-white/90 flex items-center gap-2">
-              <Play className="h-4 w-4 text-cyan-300" /> {content.sections.demo.title} <span className="ml-2 text-xs text-white/50">{content.sections.demo.status.replace('-', ' ')}</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <AspectRatio ratio={16/9}>
-              <div className="w-full h-full grid place-items-center rounded-lg border border-white/10 bg-gradient-to-b from-white/5 to-transparent text-white/70">
-                {content.sections.demo.note}
-              </div>
-            </AspectRatio>
-          </CardContent>
-        </Card>
-      </div>
     </section>
   );
 };
@@ -264,6 +268,7 @@ export default function Landing() {
       <Nav />
       <main className="relative">
         <Hero />
+        <Demo />
         <WhatItIs />
         <WhyItMatters />
         <Waitlist />
