@@ -5,9 +5,7 @@ import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../components/ui/accordion";
-import { Badge } from "../components/ui/badge";
-import { Separator } from "../components/ui/separator";
+import { AspectRatio } from "../components/ui/aspect-ratio";
 import { Toaster } from "../components/ui/sonner";
 import { toast } from "sonner";
 import { content, saveWaitlistEntry, getWaitlistEntries } from "../mock/mock";
@@ -15,8 +13,8 @@ import {
   ArrowRight,
   Brain,
   Zap,
-  ShieldCheck,
   Mail,
+  Play,
 } from "lucide-react";
 
 const Nav = () => {
@@ -30,9 +28,8 @@ const Nav = () => {
           <span className="text-sm font-semibold tracking-wider text-white/90">iceOS</span>
         </a>
         <div className="hidden md:flex items-center gap-7 text-sm text-white/70">
-          <a href="#building" className="hover:text-white transition-colors">Product</a>
+          <a href="#what" className="hover:text-white transition-colors">What</a>
           <a href="#why" className="hover:text-white transition-colors">Why</a>
-          <a href="#who" className="hover:text-white transition-colors">Who</a>
           <a href="#cta" className="hover:text-white transition-colors">Early Access</a>
         </div>
         <div className="flex items-center gap-3">
@@ -61,16 +58,13 @@ const Hero = () => {
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 backdrop-blur-xl text-xs text-white/70">
             <Zap className="h-3.5 w-3.5 text-cyan-300" />
-            Pre‑launch invite program
+            {content.sections.hero.eyebrow}
           </div>
           <h1 className="mt-5 text-4xl md:text-6xl font-semibold tracking-tight text-white">
             {content.sections.hero.headline}
           </h1>
           <p className="mt-4 text-lg md:text-xl text-white/70">
             {content.sections.hero.subhead}
-          </p>
-          <p className="mt-3 text-base md:text-lg text-white/60">
-            {content.sections.hero.body}
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
@@ -80,9 +74,6 @@ const Hero = () => {
                 <ArrowRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-0.5" />
               </Button>
             </a>
-            <a href="#building" className="inline-flex h-11 items-center justify-center rounded-md border border-white/10 bg-white/5 px-5 text-white/80 hover:text-white hover:bg-white/10">
-              See how it works
-            </a>
           </div>
         </div>
       </div>
@@ -90,90 +81,25 @@ const Hero = () => {
   );
 };
 
-const Building = () => {
-  return (
-    <section id="building" className="relative py-10 md:py-16">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="max-w-3xl">
-          <h2 className="text-2xl md:text-3xl font-semibold text-white">{content.sections.building.title}</h2>
-          <p className="mt-2 text-white/70">{content.sections.building.lead}</p>
-          <p className="mt-3 text-white/60 max-w-2xl">{content.sections.building.copy}</p>
-        </div>
-        <div className="mt-6 flex flex-wrap gap-2">
-          {content.sections.building.hints.map((h) => (
-            <Badge key={h} className="bg-white/5 text-white border border-white/10">{h}</Badge>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const WhyMatters = () => (
-  <section id="why" className="relative py-10 md:py-16">
-    <div className="mx-auto max-w-7xl px-6 grid md:grid-cols-2 gap-10 items-start">
-      <div>
-        <h3 className="text-2xl md:text-3xl font-semibold text-white">{content.sections.matters.title}</h3>
-        <p className="mt-4 text-white/70 leading-relaxed">{content.sections.matters.copy}</p>
-        <p className="mt-5 text-white/80 font-medium">Key principles:</p>
-        <ul className="mt-2 space-y-2">
-          {content.sections.matters.principles.map((p) => (
-            <li key={p.title} className="flex items-start gap-2 text-white/80">
-              <ShieldCheck className="h-4 w-4 text-teal-300 mt-0.5" />
-              <span><span className="font-semibold text-white">{p.title}:</span> {p.desc}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div>
-        <Card className="bg-white/5 border-white/10 backdrop-blur-2xl">
-          <CardContent className="pt-6 text-white/80 text-sm leading-relaxed">
-            <div className="rounded-lg border border-white/10 p-4 bg-white/5">
-              <p className="text-white/80">Make what works for you legible, durable, and composable — so it survives handoffs and compounds.</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  </section>
-);
-
-const Audience = () => (
-  <section id="who" className="py-10 md:py-16">
+const WhatItIs = () => (
+  <section id="what" className="relative py-10 md:py-16">
     <div className="mx-auto max-w-7xl px-6">
-      <h3 className="text-2xl md:text-3xl font-semibold text-white">{content.sections.audience.title}</h3>
-      <div className="mt-4 flex flex-wrap gap-2">
-        {content.sections.audience.chips.map((c) => (
-          <Badge key={c} className="bg-white/5 text-white border border-white/10">
-            {c}
-          </Badge>
-        ))}
-      </div>
-      <ul className="mt-5 grid gap-2 text-white/70 list-disc pl-5 max-w-2xl">
-        {content.sections.audience.bullets.map((b) => (
-          <li key={b}>{b}</li>
-        ))}
-      </ul>
+      <h2 className="text-2xl md:text-3xl font-semibold text-white">{content.sections.what.title}</h2>
+      <p className="mt-3 text-white/70 max-w-3xl leading-relaxed">{content.sections.what.copy}</p>
     </div>
   </section>
 );
 
-const WhyNow = () => (
-  <section className="py-10 md:py-16">
-    <div className="mx-auto max-w-7xl px-6 grid md:grid-cols-2 gap-10 items-center">
-      <div>
-        <h3 className="text-2xl md:text-3xl font-semibold text-white">{content.sections.whyNow.title}</h3>
-        <p className="mt-4 text-white/70 leading-relaxed max-w-2xl">{content.sections.whyNow.copy}</p>
+const WhyItMatters = () => (
+  <section id="why" className="relative py-10 md:py-16">
+    <div className="mx-auto max-w-7xl px-6">
+      <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 backdrop-blur-xl text-xs text-white/70">
+        {content.sections.why.eyebrow}
       </div>
-      <div className="relative">
-        <div className="rounded-xl bg-white/5 border border-white/10 backdrop-blur-2xl p-6">
-          <div className="flex items-start gap-3 text-white/80">
-            <Brain className="h-5 w-5 text-cyan-300 mt-0.5" />
-            <p className="text-sm leading-relaxed">
-              Treat expertise as infrastructure: legible, versioned, and deployable across dashboards, tools, and products.
-            </p>
-          </div>
-        </div>
+      <h3 className="mt-4 text-2xl md:text-3xl font-semibold text-white">{content.sections.why.title}</h3>
+      <div className="mt-4 space-y-1 text-white/70 text-lg">
+        <p>{content.sections.why.copyPrimary}</p>
+        <p className="text-white/60">{content.sections.why.copySecondary}</p>
       </div>
     </div>
   </section>
@@ -219,21 +145,10 @@ const Waitlist = () => {
 
   return (
     <section id="cta" className="py-12 md:py-16">
-      <div className="mx-auto max-w-7xl px-6 grid md:grid-cols-2 gap-10 items-center">
+      <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-10 items-start">
         <div>
           <h3 className="text-2xl md:text-3xl font-semibold text-white">{content.sections.finalCta.title}</h3>
           <p className="mt-4 text-white/70 leading-relaxed max-w-2xl">{content.sections.finalCta.copy}</p>
-
-          <div className="mt-6">
-            <Accordion type="single" collapsible className="w-full">
-              {content.sections.extrasAccordion.map((item, idx) => (
-                <AccordionItem key={idx} value={`item-${idx}`}>
-                  <AccordionTrigger className="text-white/90">{item.q}</AccordionTrigger>
-                  <AccordionContent className="text-white/70">{item.a}</AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
         </div>
         <div>
           <form onSubmit={onSubmit} className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-2xl p-5">
@@ -293,6 +208,24 @@ const Waitlist = () => {
           </form>
         </div>
       </div>
+
+      {/* Demo section */}
+      <div className="mx-auto max-w-7xl px-6 mt-10">
+        <Card className="bg-white/5 border-white/10 backdrop-blur-2xl">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-white/90 flex items-center gap-2">
+              <Play className="h-4 w-4 text-cyan-300" /> {content.sections.demo.title} <span className="ml-2 text-xs text-white/50">{content.sections.demo.status.replace('-', ' ')}</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <AspectRatio ratio={16/9}>
+              <div className="w-full h-full grid place-items-center rounded-lg border border-white/10 bg-gradient-to-b from-white/5 to-transparent text-white/70">
+                {content.sections.demo.note}
+              </div>
+            </AspectRatio>
+          </CardContent>
+        </Card>
+      </div>
     </section>
   );
 };
@@ -307,9 +240,8 @@ const Footer = () => (
         <span>© {new Date().getFullYear()} iceOS</span>
       </div>
       <div className="flex items-center gap-4">
-        <a href="#building" className="hover:text-white">Product</a>
+        <a href="#what" className="hover:text-white">What</a>
         <a href="#why" className="hover:text-white">Why</a>
-        <a href="#who" className="hover:text-white">Who</a>
         <a href="#cta" className="hover:text-white">Join</a>
       </div>
     </div>
@@ -332,10 +264,8 @@ export default function Landing() {
       <Nav />
       <main className="relative">
         <Hero />
-        <Building />
-        <WhyMatters />
-        <Audience />
-        <WhyNow />
+        <WhatItIs />
+        <WhyItMatters />
         <Waitlist />
       </main>
       <Footer />
