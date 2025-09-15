@@ -101,3 +101,78 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Build iceOS pre-launch site; add Philosophy page; replace mock waitlist with real backend; ensure routing works."
+backend:
+  - task: "Waitlist POST endpoint"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Implemented POST /api/waitlist storing to Mongo."
+  - task: "Waitlist GET endpoint"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Implemented GET /api/waitlist (sorted desc)."
+frontend:
+  - task: "Landing page trimmed layout"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/Landing.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Hero, Demo under hero, What, Why, CTA with backend integration."
+  - task: "Philosophy page"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/Philosophy.jsx"
+    stuck_count: 0
+    priority: "low"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Static content and nav link added."
+  - task: "Frontend API integration for waitlist"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/lib/api.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Wired createWaitlist to form; uses env REACT_APP_BACKEND_URL with /api prefix."
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Test backend waitlist POST/GET"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: "Please validate POST /api/waitlist with sample payloads and GET listing. Then I will ask user about automated UI tests."
