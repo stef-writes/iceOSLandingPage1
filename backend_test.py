@@ -183,7 +183,9 @@ def test_duplicate_email_protection():
     print("Testing duplicate email protection")
     print("=" * 60)
     
-    test_email = "dupe@test.com"
+    import time
+    timestamp = str(int(time.time()))
+    test_email = f"dupe{timestamp}@test.com"
     payload = {"email": test_email}
     
     # First POST should succeed (201)
