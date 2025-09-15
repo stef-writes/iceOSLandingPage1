@@ -23,9 +23,12 @@ def test_waitlist_post_valid_payloads():
     print("Testing POST /api/waitlist with valid payloads")
     print("=" * 60)
     
+    import time
+    timestamp = str(int(time.time()))
+    
     # Test payload 1: Full payload with all fields
     payload1 = {
-        "email": "alpha@test.com",
+        "email": f"alpha{timestamp}@test.com",
         "role": "Founder / Creator", 
         "usecase": "Encode ops systems"
     }
@@ -50,7 +53,7 @@ def test_waitlist_post_valid_payloads():
     
     # Test payload 2: Minimal payload with just email
     payload2 = {
-        "email": "beta@test.com"
+        "email": f"beta{timestamp}@test.com"
     }
     
     print(f"\nTesting payload 2: {payload2}")
