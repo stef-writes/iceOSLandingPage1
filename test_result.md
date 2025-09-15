@@ -174,7 +174,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Test backend waitlist POST/GET"
+    - "Backend waitlist endpoints testing completed"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
@@ -182,3 +182,5 @@ test_plan:
 agent_communication:
   - agent: "main"
     message: "Please validate POST /api/waitlist with sample payloads and GET listing. Then I will ask user about automated UI tests."
+  - agent: "testing"
+    message: "✅ BACKEND TESTING COMPLETE: All waitlist endpoints working perfectly. POST /api/waitlist accepts valid payloads (both full and minimal), properly rejects invalid emails with 422, returns correct JSON with id/email/created_at. GET /api/waitlist returns properly sorted array (most recent first). CORS preflight working. Created /app/backend_test.py for future testing. Ready for frontend integration testing if needed."
