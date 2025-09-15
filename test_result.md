@@ -218,9 +218,9 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Re-test POST/GET waitlist with dedup (409), rate limit (429), and CSV export"
-    - "Verify UI polish: active nav, scroll-mt offsets, focus rings, demo padding, entrance animations"
-  stuck_tasks: []
+    - "Rate limiting infrastructure fix (X-Forwarded-For header support)"
+  stuck_tasks:
+    - "Rate limiting (429 after 5 requests)"
   test_all: false
   test_priority: "high_first"
 
@@ -229,3 +229,5 @@ agent_communication:
     message: "Please validate POST /api/waitlist with sample payloads and GET listing. Then I will ask user about automated UI tests."
   - agent: "testing"
     message: "✅ BACKEND TESTING COMPLETE: All waitlist endpoints working perfectly. POST /api/waitlist accepts valid payloads (both full and minimal), properly rejects invalid emails with 422, returns correct JSON with id/email/created_at. GET /api/waitlist returns properly sorted array (most recent first). CORS preflight working. Created /app/backend_test.py for future testing. Ready for frontend integration testing if needed."
+  - agent: "testing"
+    message: "✅ HARDENING TESTS COMPLETE: Tested all 4 requested hardening features. WORKING: (1) Duplicate email protection returns 409 with proper message, (2) Honeypot protection works - fake success but no real data stored, (3) CSV export returns proper CSV with headers and data. INFRASTRUCTURE ISSUE: Rate limiting code is correct but not working in Kubernetes - needs X-Forwarded-For header support to get real client IP behind proxy. All functional tests passed (7/8), 1 infrastructure limitation noted."
