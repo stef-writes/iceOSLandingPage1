@@ -1,14 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Nav from "../components/Nav";
 import { Toaster } from "../components/ui/sonner";
 import { Workflow, Eye, ChevronRight } from "lucide-react";
-import PolymathDiagram from "../components/diagrams/PolymathDiagram";
+import FlowPolymath from "../components/diagrams/FlowPolymath";
 
 export default function LearnMore() {
   useEffect(() => {
     document.documentElement.style.scrollBehavior = "smooth";
     return () => { document.documentElement.style.scrollBehavior = "auto"; };
   }, []);
+  const [highlight, setHighlight] = useState({});
+  const [diagramMode] = useState("react");
 
   return (
     <div className="dark theme-ice min-h-screen bg-[#0b0d0e] text-white">
@@ -49,9 +51,19 @@ export default function LearnMore() {
 
           <div className="mx-auto max-w-3xl border-t border-white/10" />
 
-          {/* Polymath Diagram (scaffold) */}
+          {/* Example selector drives highlights */}
           <div className="py-6">
-            <PolymathDiagram />
+            <div className="mb-4 flex flex-wrap items-center gap-3 text-white/80 text-sm">
+              <span className="text-white/60">Highlight:</span>
+              <button onClick={() => setHighlight({ input: true, researchAgent: true })} className="px-3 py-1 rounded-md border border-white/10 bg-white/5 hover:bg-white/10">Ingest → Research</button>
+              <button onClick={() => setHighlight({ philosophyLens: true, technicalExplainer: true, ideaGenerator: true })} className="px-3 py-1 rounded-md border border-white/10 bg-white/5 hover:bg-white/10">Context → Idea</button>
+              <button onClick={() => setHighlight({ ideaGenerator: true, criticAgent: true, synthesizer: true })} className="px-3 py-1 rounded-md border border-white/10 bg-white/5 hover:bg-white/10">Synthesis Path</button>
+              <button onClick={() => setHighlight({ zoneDistribution: true })} className="px-3 py-1 rounded-md border border-white/10 bg-white/5 hover:bg-white/10">Distribution Focus</button>
+              <button onClick={() => setHighlight({ philosophyLens: true })} className="px-3 py-1 rounded-md border border-white/10 bg-white/5 hover:bg-white/10">Philosophy Lens</button>
+              <button onClick={() => setHighlight({ technicalExplainer: true })} className="px-3 py-1 rounded-md border border-white/10 bg-white/5 hover:bg-white/10">Technical Explainer</button>
+              <button onClick={() => setHighlight({})} className="px-3 py-1 rounded-md border border-white/10 bg-white/5 hover:bg-white/10">Reset</button>
+            </div>
+            <FlowPolymath highlight={highlight} />
           </div>
 
           <div className="mx-auto max-w-3xl border-t border-white/10" />
