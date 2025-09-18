@@ -1,14 +1,15 @@
 export const content = {
   brand: {
     name: "iceOS",
-    tag: "The independent-creator environment",
-    oneLiner: "Craft intelligence that mirrors how you think.",
+    tag: "The Independent-Creator Environment",
+    oneLiner: "Build systems that think with your judgment.",
   },
   sections: {
     hero: {
       eyebrow: "iceOS",
-      headline: "The independent-creator environment",
-      subhead: "Craft intelligence that mirrors how you think.",
+      headline: "The Independent-Creator Environment",
+      subhead: "Build systems that think with your judgment.",
+      accent: "Commoditizing Expertise.",
       cta: "Join the Waitlist",
     },
     what: {
@@ -29,8 +30,8 @@ export const content = {
       cta: "Join the Waitlist",
     },
     demo: {
-      title: "Demo video",
-      status: "coming-soon",
+      title: "Demo Video",
+      status: "Coming Soon",
       note: "Demo video — coming soon",
     },
   },

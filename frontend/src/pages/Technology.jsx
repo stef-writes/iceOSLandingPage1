@@ -4,10 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { Toaster } from "../components/ui/sonner";
 import { Link, useLocation } from "react-router-dom";
 import Nav from "../components/Nav";
-import { Brain, ArrowRight, Target, Lightbulb, BookOpenText, Users } from "lucide-react";
+import { Brain, Cpu, Boxes, Layers, ArrowRight } from "lucide-react";
 
 
-export default function Philosophy() {
+export default function Technology() {
   useEffect(() => {
     document.documentElement.style.scrollBehavior = "smooth";
     return () => { document.documentElement.style.scrollBehavior = "auto"; };
@@ -15,7 +15,6 @@ export default function Philosophy() {
 
   return (
     <div className="dark theme-ice min-h-screen bg-[#0b0d0e] text-white">
-      {/* accent background */}
       <div className="fixed inset-0 -z-20 bg-[radial-gradient(1200px_500px_at_80%_-10%,rgba(34,211,238,0.08),transparent)]" />
       <Nav />
       <main className="pt-28 md:pt-32 pb-12 motion-safe:animate-fade-in-up" />
@@ -23,3 +22,5 @@ export default function Philosophy() {
     </div>
   );
 }
+
+
