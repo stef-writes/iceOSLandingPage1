@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect } from "react";
-import ReactFlow, { Background, Controls, addEdge, useEdgesState, useNodesState } from "reactflow";
+import ReactFlow, { Background, Controls, addEdge, useEdgesState, useNodesState, Position } from "reactflow";
 import "reactflow/dist/style.css";
 
 const initialNodes = [
-  { id: "input", position: { x: 0, y: 220 }, data: { label: "Transcript / Paper / Notes" }, style: { width: 240 } },
-  { id: "k-ra", position: { x: 320, y: 140 }, data: { label: "Research Agent" }, style: { width: 220 } },
-  { id: "k-pl", position: { x: 320, y: 240 }, data: { label: "Philosophy Lens" }, style: { width: 220 } },
-  { id: "k-te", position: { x: 320, y: 340 }, data: { label: "Technical Explainer" }, style: { width: 220 } },
-  { id: "s-ig", position: { x: 640, y: 160 }, data: { label: "Idea Extrapolator" }, style: { width: 240 } },
-  { id: "s-ca", position: { x: 640, y: 260 }, data: { label: "Critic Agent" }, style: { width: 240 } },
-  { id: "s-sz", position: { x: 640, y: 360 }, data: { label: "Synthesizer" }, style: { width: 260 } },
-  { id: "d-pod", position: { x: 980, y: 140 }, data: { label: "Draft — Podcast" }, style: { width: 200 } },
-  { id: "d-blog", position: { x: 980, y: 220 }, data: { label: "Draft — Blog" }, style: { width: 200 } },
-  { id: "d-note", position: { x: 980, y: 300 }, data: { label: "Draft — Notebook" }, style: { width: 200 } },
-  { id: "d-social", position: { x: 980, y: 380 }, data: { label: "Draft — Social" }, style: { width: 200 } },
+  { id: "input", position: { x: 0, y: 220 }, data: { label: "Transcript / Paper / Notes" }, style: { width: 240 }, sourcePosition: Position.Right },
+  { id: "k-ra", position: { x: 320, y: 140 }, data: { label: "Research Agent" }, style: { width: 220 }, targetPosition: Position.Left, sourcePosition: Position.Right },
+  { id: "k-pl", position: { x: 320, y: 240 }, data: { label: "Philosophy Lens" }, style: { width: 220 }, targetPosition: Position.Left, sourcePosition: Position.Right },
+  { id: "k-te", position: { x: 320, y: 340 }, data: { label: "Technical Explainer" }, style: { width: 220 }, targetPosition: Position.Left, sourcePosition: Position.Right },
+  { id: "s-ig", position: { x: 640, y: 160 }, data: { label: "Idea Extrapolator" }, style: { width: 240 }, targetPosition: Position.Left, sourcePosition: Position.Right },
+  { id: "s-ca", position: { x: 640, y: 260 }, data: { label: "Critic Agent" }, style: { width: 240 }, targetPosition: Position.Left, sourcePosition: Position.Right },
+  { id: "s-sz", position: { x: 640, y: 360 }, data: { label: "Synthesizer" }, style: { width: 260 }, targetPosition: Position.Left, sourcePosition: Position.Right },
+  { id: "d-pod", position: { x: 980, y: 140 }, data: { label: "Draft — Podcast" }, style: { width: 200 }, targetPosition: Position.Left },
+  { id: "d-blog", position: { x: 980, y: 220 }, data: { label: "Draft — Blog" }, style: { width: 200 }, targetPosition: Position.Left },
+  { id: "d-note", position: { x: 980, y: 300 }, data: { label: "Draft — Notebook" }, style: { width: 200 }, targetPosition: Position.Left },
+  { id: "d-social", position: { x: 980, y: 380 }, data: { label: "Draft — Social" }, style: { width: 200 }, targetPosition: Position.Left },
 ];
 
 const initialEdges = [
@@ -119,7 +119,7 @@ export default function FlowPolymath({ highlight = {} }) {
         onConnect={onConnect}
         fitView
         proOptions={{ hideAttribution: true }}
-        defaultEdgeOptions={{ style: { stroke: "#22d3ee" } }}
+        defaultEdgeOptions={{ type: "smoothstep", style: { stroke: "#22d3ee" } }}
         style={{ background: "#0b0d0e" }}
       >
         <Background color="rgba(255,255,255,0.06)" gap={24} />
