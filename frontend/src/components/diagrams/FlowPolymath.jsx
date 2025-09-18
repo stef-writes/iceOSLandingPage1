@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import ReactFlow, { Background, addEdge, useEdgesState, useNodesState, Position, Handle } from "reactflow";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import ReactFlow, { Background, addEdge, useEdgesState, useNodesState, Position, Handle, NodeToolbar } from "reactflow";
 import "reactflow/dist/style.css";
 
 const initialNodes = [
@@ -18,35 +17,31 @@ const initialNodes = [
 ];
 
 function EduNode({ data }) {
-  const showHint = !!data?.showHint;
+  const [hovered, setHovered] = React.useState(false);
+  const showHint = data?.showHint === true;
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div style={{ position: "relative", padding: "10px 12px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.45)", background: "transparent" }}>
-            <div style={{ fontSize: 14, lineHeight: 1.2 }}>{data?.label}</div>
-            {showHint ? (
-              <div className="absolute -top-1.5 -right-1.5" aria-hidden="true">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-300 opacity-40" />
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400" />
-                </span>
-              </div>
-            ) : null}
-            {/* Handles for side attachments */}
-            <Handle type="target" position={Position.Left} style={{ background: "#22d3ee" }} />
-            <Handle type="source" position={Position.Right} style={{ background: "#22d3ee" }} />
-          </div>
-        </TooltipTrigger>
+    <div style={{ position: "relative" }} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+      <div style={{ padding: "10px 12px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.45)", background: "transparent" }}>
+        <div style={{ fontSize: 14, lineHeight: 1.2 }}>{data?.label}</div>
         {showHint ? (
-          <TooltipContent>
-            <div className="text-sm">Hover card content</div>
-          </TooltipContent>
-        ) : (
-          <></>
-        )}
-      </Tooltip>
-    </TooltipProvider>
+          <div className="absolute -top-1.5 -right-1.5" aria-hidden="true">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-300 opacity-40" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400" />
+            </span>
+          </div>
+        ) : null}
+        <Handle type="target" position={Position.Left} style={{ background: "#22d3ee" }} />
+        <Handle type="source" position={Position.Right} style={{ background: "#22d3ee" }} />
+      </div>
+      {showHint ? (
+        <NodeToolbar isVisible={hovered} position={Position.Top} className="!bg-white/95 !text-black !rounded-md !shadow-lg !p-3 !border !border-black/10">
+          <div className="max-w-xs text-sm leading-snug">
+            Educational content goes here.
+          </div>
+        </NodeToolbar>
+      ) : null}
+    </div>
   );
 }
 
