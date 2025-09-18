@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import ReactFlow, { Background, Controls, addEdge, useEdgesState, useNodesState, Position } from "reactflow";
+import ReactFlow, { Background, addEdge, useEdgesState, useNodesState, Position } from "reactflow";
 import "reactflow/dist/style.css";
 
 const initialNodes = [
@@ -118,12 +118,16 @@ export default function FlowPolymath({ highlight = {} }) {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         fitView
+        zoomOnScroll={false}
+        zoomOnPinch={false}
+        zoomOnDoubleClick={false}
+        panOnDrag={false}
+        panOnScroll={false}
         proOptions={{ hideAttribution: true }}
         defaultEdgeOptions={{ type: "smoothstep", style: { stroke: "#22d3ee" } }}
         style={{ background: "#0b0d0e" }}
       >
         <Background color="rgba(255,255,255,0.06)" gap={24} />
-        <Controls />
         
       </ReactFlow>
     </div>
