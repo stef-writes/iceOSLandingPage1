@@ -2,20 +2,27 @@ import React, { useCallback, useEffect } from "react";
 import ReactFlow, { Background, addEdge, useEdgesState, useNodesState, Position, Handle } from "reactflow";
 import "reactflow/dist/style.css";
 import { initialNodes as baseNodes, initialEdges as baseEdges } from "./polymathConfig";
+import EduHoverCard from "./EduHoverCard";
 
 const initialNodes = baseNodes;
 
 function EduNode({ data }) {
   const [hovered, setHovered] = React.useState(false);
+  const ref = React.useRef(null);
+  const [rect, setRect] = React.useState(null);
   const showHint = data?.showHint === true;
   const title = data?.cardTitle;
   const body = data?.cardBody;
+  useEffect(() => {
+    if (!ref.current) return;
+    setRect(ref.current.getBoundingClientRect());
+  }, [hovered]);
   return (
-    <div style={{ position: "relative" }} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+    <div ref={ref} style={{ position: "relative" }} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
       <div style={{ padding: "10px 12px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.45)", background: "transparent" }}>
         <div style={{ fontSize: 14, lineHeight: 1.2 }}>{data?.label}</div>
         {showHint ? (
-          <div className="absolute -top-1.5 -right-1.5" aria-hidden="true">
+          <div className="absolute -top-1.5 -right-1.5" aria-hidden>
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-300 opacity-40" />
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400" />
@@ -25,15 +32,13 @@ function EduNode({ data }) {
         <Handle type="target" position={Position.Left} style={{ background: "#22d3ee" }} />
         <Handle type="source" position={Position.Right} style={{ background: "#22d3ee" }} />
       </div>
-      {showHint && hovered ? (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 -translate-y-full z-50 w-64 rounded-md border border-white/10 bg-white/95 p-3 text-black shadow-xl" style={{ pointerEvents: "none" }}>
-          {title ? <div className="text-xs font-semibold tracking-wide text-black/70">{title}</div> : null}
-          {body ? <div className="mt-1.5 text-sm leading-snug">{body}</div> : null}
-        </div>
-      ) : null}
+      <EduHoverCard anchorRect={rect} title={title} body={body} visible={showHint && hovered} />
     </div>
   );
 }
+
+const nodeTypes = { eduNode: EduNode };
+const defaultEdgeOptions = { type: "smoothstep", style: { stroke: "#22d3ee" } };
 
 const initialEdges = baseEdges;
 
@@ -133,9 +138,9 @@ export default function FlowPolymath({ highlight = {} }) {
         nodesDraggable={false}
         nodesConnectable={false}
         elementsSelectable={false}
-        nodeTypes={React.useMemo(() => ({ eduNode: EduNode }), [])}
+        nodeTypes={nodeTypes}
         proOptions={{ hideAttribution: true }}
-        defaultEdgeOptions={{ type: "smoothstep", style: { stroke: "#22d3ee" } }}
+        defaultEdgeOptions={defaultEdgeOptions}
         style={{ background: "#0b0d0e" }}
       >
         <Background color="rgba(255,255,255,0.06)" gap={24} />
