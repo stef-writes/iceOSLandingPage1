@@ -1,20 +1,54 @@
 import React, { useCallback, useEffect } from "react";
-import ReactFlow, { Background, addEdge, useEdgesState, useNodesState, Position } from "reactflow";
+import ReactFlow, { Background, addEdge, useEdgesState, useNodesState, Position, Handle } from "reactflow";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import "reactflow/dist/style.css";
 
 const initialNodes = [
-  { id: "input", position: { x: 0, y: 220 }, data: { label: "Transcript / Paper / Notes" }, style: { width: 240 }, sourcePosition: Position.Right },
-  { id: "k-ra", position: { x: 320, y: 140 }, data: { label: "Research Agent" }, style: { width: 220 }, targetPosition: Position.Left, sourcePosition: Position.Right },
-  { id: "k-pl", position: { x: 320, y: 240 }, data: { label: "Philosophy Lens" }, style: { width: 220 }, targetPosition: Position.Left, sourcePosition: Position.Right },
-  { id: "k-te", position: { x: 320, y: 340 }, data: { label: "Technical Explainer" }, style: { width: 220 }, targetPosition: Position.Left, sourcePosition: Position.Right },
-  { id: "s-ig", position: { x: 640, y: 160 }, data: { label: "Idea Extrapolator" }, style: { width: 240 }, targetPosition: Position.Left, sourcePosition: Position.Right },
-  { id: "s-ca", position: { x: 640, y: 260 }, data: { label: "Critic Agent" }, style: { width: 240 }, targetPosition: Position.Left, sourcePosition: Position.Right },
-  { id: "s-sz", position: { x: 640, y: 360 }, data: { label: "Synthesizer" }, style: { width: 260 }, targetPosition: Position.Left, sourcePosition: Position.Right },
-  { id: "d-pod", position: { x: 980, y: 140 }, data: { label: "Draft — Podcast" }, style: { width: 200 }, targetPosition: Position.Left },
-  { id: "d-blog", position: { x: 980, y: 220 }, data: { label: "Draft — Blog" }, style: { width: 200 }, targetPosition: Position.Left },
-  { id: "d-note", position: { x: 980, y: 300 }, data: { label: "Draft — Notebook" }, style: { width: 200 }, targetPosition: Position.Left },
-  { id: "d-social", position: { x: 980, y: 380 }, data: { label: "Draft — Social" }, style: { width: 200 }, targetPosition: Position.Left },
+  { id: "input", type: "eduNode", position: { x: 0, y: 220 }, data: { label: "Transcript / Paper / Notes", showHint: true }, style: { width: 240 }, sourcePosition: Position.Right, draggable: false, selectable: false },
+  { id: "k-ra", type: "eduNode", position: { x: 320, y: 140 }, data: { label: "Research Agent", showHint: true }, style: { width: 220 }, targetPosition: Position.Left, sourcePosition: Position.Right, draggable: false, selectable: false },
+  { id: "k-pl", type: "eduNode", position: { x: 320, y: 240 }, data: { label: "Philosophy Lens", showHint: true }, style: { width: 220 }, targetPosition: Position.Left, sourcePosition: Position.Right, draggable: false, selectable: false },
+  { id: "k-te", type: "eduNode", position: { x: 320, y: 340 }, data: { label: "Technical Explainer", showHint: true }, style: { width: 220 }, targetPosition: Position.Left, sourcePosition: Position.Right, draggable: false, selectable: false },
+  { id: "s-ig", type: "eduNode", position: { x: 640, y: 160 }, data: { label: "Idea Extrapolator", showHint: true }, style: { width: 240 }, targetPosition: Position.Left, sourcePosition: Position.Right, draggable: false, selectable: false },
+  { id: "s-ca", type: "eduNode", position: { x: 640, y: 260 }, data: { label: "Critic Agent", showHint: true }, style: { width: 240 }, targetPosition: Position.Left, sourcePosition: Position.Right, draggable: false, selectable: false },
+  { id: "s-sz", type: "eduNode", position: { x: 640, y: 360 }, data: { label: "Synthesizer", showHint: true }, style: { width: 260 }, targetPosition: Position.Left, sourcePosition: Position.Right, draggable: false, selectable: false },
+  { id: "d-pod", type: "eduNode", position: { x: 980, y: 140 }, data: { label: "Draft — Podcast", showHint: true }, style: { width: 200 }, targetPosition: Position.Left, draggable: false, selectable: false },
+  { id: "d-blog", type: "eduNode", position: { x: 980, y: 220 }, data: { label: "Draft — Blog", showHint: false }, style: { width: 200 }, targetPosition: Position.Left, draggable: false, selectable: false },
+  { id: "d-note", type: "eduNode", position: { x: 980, y: 300 }, data: { label: "Draft — Notebook", showHint: true }, style: { width: 200 }, targetPosition: Position.Left, draggable: false, selectable: false },
+  { id: "d-social", type: "eduNode", position: { x: 980, y: 380 }, data: { label: "Draft — Social", showHint: false }, style: { width: 200 }, targetPosition: Position.Left, draggable: false, selectable: false },
 ];
+
+function EduNode({ data }) {
+  const showHint = !!data?.showHint;
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div style={{ position: "relative", padding: "10px 12px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.45)", background: "transparent" }}>
+            <div style={{ fontSize: 14, lineHeight: 1.2 }}>{data?.label}</div>
+            {showHint ? (
+              <div className="absolute -top-1.5 -right-1.5" aria-hidden="true">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-300 opacity-40" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400" />
+                </span>
+              </div>
+            ) : null}
+            {/* Handles for side attachments */}
+            <Handle type="target" position={Position.Left} style={{ background: "#22d3ee" }} />
+            <Handle type="source" position={Position.Right} style={{ background: "#22d3ee" }} />
+          </div>
+        </TooltipTrigger>
+        {showHint ? (
+          <TooltipContent>
+            <div className="text-sm">Hover card content</div>
+          </TooltipContent>
+        ) : (
+          <></>
+        )}
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
 
 const initialEdges = [
   { id: "e0", source: "input", target: "k-ra", animated: true },
@@ -123,6 +157,10 @@ export default function FlowPolymath({ highlight = {} }) {
         zoomOnDoubleClick={false}
         panOnDrag={false}
         panOnScroll={false}
+        nodesDraggable={false}
+        nodesConnectable={false}
+        elementsSelectable={false}
+        nodeTypes={{ eduNode: EduNode }}
         proOptions={{ hideAttribution: true }}
         defaultEdgeOptions={{ type: "smoothstep", style: { stroke: "#22d3ee" } }}
         style={{ background: "#0b0d0e" }}
