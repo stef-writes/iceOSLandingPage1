@@ -33,7 +33,7 @@ const Hero = () => {
 
       <div className="mx-auto max-w-7xl px-6">
         <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 backdrop-blur-xl text-xs text-white/70">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 backdrop-blur-2xl text-xs text-white/70">
             <Zap className="h-3.5 w-3.5 text-cyan-300" />
             {content.sections.hero.eyebrow}
           </div>
@@ -97,7 +97,7 @@ const WhatItIs = () => (
 const WhyItMatters = () => (
   <section id="why" className="py-10 scroll-mt-24">
     <div className="mx-auto max-w-7xl px-6">
-      <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 backdrop-blur-xl text-xs text-white/70">
+      <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 backdrop-blur-2xl text-xs text-white/70">
         {content.sections.why.eyebrow}
       </div>
       <h3 className="mt-4 text-2xl md:text-3xl font-semibold text-white">{content.sections.why.title}</h3>
@@ -218,14 +218,6 @@ const Footer = () => (
         </div>
         <span>© {new Date().getFullYear()} iceOS</span>
       </div>
-      <div className="flex items-center gap-4">
-        <Link to="/philosophy" className="transition-colors hover:underline underline-offset-4 decoration-white/30 hover:text-white">Philosophy</Link>
-        <Link to="/technology" className="transition-colors hover:underline underline-offset-4 decoration-white/30 hover:text-white">Technology</Link>
-        <Link to="/market" className="transition-colors hover:underline underline-offset-4 decoration-white/30 hover:text-white">Market</Link>
-        <a href="#what" className="transition-colors hover:underline underline-offset-4 decoration-white/30 hover:text-white">What</a>
-        <a href="#why" className="transition-colors hover:underline underline-offset-4 decoration-white/30 hover:text-white">Why</a>
-        <a href="#cta" className="transition-colors hover:underline underline-offset-4 decoration-white/30 hover:text-white">Join</a>
-      </div>
     </div>
   </footer>
 );
@@ -240,7 +232,7 @@ export default function Landing() {
   }, []);
 
   return (
-    <div className="dark theme-ice min-h-screen bg-[#0b0d0e] text-white">
+    <div className="dark theme-ice min-h-screen bg-[#0b0d0e] text.white">
       {/* page bg subtle noise and grid */}
       <div className="fixed inset-0 -z-20 bg-[radial-gradient(1200px_500px_at_80%_-10%,rgba(34,211,238,0.08),transparent)]" />
       <Nav />
