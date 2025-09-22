@@ -18,6 +18,7 @@ import {
   Zap,
   Mail,
   Play,
+  Eye,
 } from "lucide-react";
 
 
@@ -88,8 +89,25 @@ const Demo = () => (
 const WhatItIs = () => (
   <section id="what" className="py-10 scroll-mt-24">
     <div className="mx-auto max-w-7xl px-6">
-      <h2 className="text-2xl md:text-3xl font-semibold text-white">{content.sections.what.title}</h2>
-      <p className="mt-3 text-white/70 max-w-3xl leading-relaxed">{content.sections.what.copy}</p>
+      <h2 className="text-2xl md:text-3xl font-semibold text-white">From nodes to systems</h2>
+      <p className="mt-3 text-white/70 max-w-3xl leading-relaxed">Design judgment — not just tasks — reproducible, shareable, and improvable.</p>
+    </div>
+  </section>
+);
+
+const WhatMakesItDifferent = () => (
+  <section id="different" className="py-10 scroll-mt-24">
+    <div className="mx-auto max-w-7xl px-6">
+      <div className="flex items-center gap-2 text-white/60 text-xs">
+        <Eye className="h-4 w-4 text-cyan-300/80" />
+        <span>What makes it different</span>
+      </div>
+      <h2 className="mt-3 text-2xl md:text-3xl font-semibold text-white">What makes it different</h2>
+      <p className="mt-3 italic text-white/70">Other tools give outputs. iceOS makes thinking a design material.</p>
+      <ul className="mt-3 list-disc pl-5 space-y-1 text-white/70">
+        <li><span className="font-medium text-white/80">Network</span> → Designed systems can be shared, remixed, and scaled.</li>
+        <li><span className="font-medium text-white/80">Trust</span> → Designed thinking is inspectable, governed, and improvable.</li>
+      </ul>
     </div>
   </section>
 );
@@ -97,13 +115,24 @@ const WhatItIs = () => (
 const WhyItMatters = () => (
   <section id="why" className="py-10 scroll-mt-24">
     <div className="mx-auto max-w-7xl px-6">
-      <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 backdrop-blur-2xl text-xs text-white/70">
-        {content.sections.why.eyebrow}
+      <div className="flex items-center gap-2 text-white/60 text-xs">
+        <Eye className="h-4 w-4 text-cyan-300/80" />
+        <span>Why it matters now</span>
       </div>
-      <h3 className="mt-4 text-2xl md:text-3xl font-semibold text-white">{content.sections.why.title}</h3>
-      <div className="mt-4 space-y-1 text-white/70 text-lg">
-        <p>{content.sections.why.copyPrimary}</p>
-        <p className="text-white/60">{content.sections.why.copySecondary}</p>
+      <h3 className="mt-3 text-2xl md:text-3xl font-semibold text-white">Why it matters now</h3>
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
+          <div className="text-white font-medium">Composability</div>
+          <p className="mt-1 text-white/70 text-sm">Mix workflows and philosophies to create new capabilities.</p>
+        </div>
+        <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
+          <div className="text-white font-medium">Cost clarity</div>
+          <p className="mt-1 text-white/70 text-sm">Like cloud compute — predictable, per-run economics.</p>
+        </div>
+        <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
+          <div className="text-white font-medium">Influence Intelligence</div>
+          <p className="mt-1 text-white/70 text-sm">Generate the judgment you value.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -240,6 +269,7 @@ export default function Landing() {
         <Hero />
         <Demo />
         <WhatItIs />
+        <WhatMakesItDifferent />
         <WhyItMatters />
         <Waitlist />
       </main>
