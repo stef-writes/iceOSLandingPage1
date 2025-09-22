@@ -1,7 +1,8 @@
 import axios from "axios";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL; // MUST be set via .env, do not hardcode
-const API_BASE = `${BACKEND_URL}/api`;
+// Prefer env override, otherwise use same-origin relative /api (works on Vercel when rewrites are configured)
+const envBackendUrl = process.env.REACT_APP_BACKEND_URL?.trim();
+const API_BASE = envBackendUrl && envBackendUrl !== "" ? `${envBackendUrl.replace(/\/$/, "")}/api` : "/api";
 
 export const createWaitlist = async (payload) => {
   const { data } = await axios.post(`${API_BASE}/waitlist`, payload);
