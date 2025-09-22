@@ -1,8 +1,8 @@
-import * as React from "react"
-import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group"
+import React from "react";
+import { ToggleGroup, ToggleGroupItem } from "@radix-ui/react-toggle-group";
 
 import { cn } from "../../lib/utils"
-import { toggleVariants } from "@/components/ui/toggle"
+import { toggleVariants } from "../ui/toggle"
 
 const ToggleGroupContext = React.createContext({
   size: "default",
@@ -40,4 +40,4 @@ const ToggleGroupItem = React.forwardRef(({ className, children, variant, size, 
 
 ToggleGroupItem.displayName = ToggleGroupPrimitive.Item.displayName
 
-export { ToggleGroup, ToggleGroupItem }
+export { ToggleGroup, ToggleGroupItem, toggleVariants };
