@@ -18,7 +18,6 @@ import {
   Zap,
   Mail,
   Play,
-  Eye,
 } from "lucide-react";
 
 
@@ -98,10 +97,6 @@ const WhatItIs = () => (
 const WhatMakesItDifferent = () => (
   <section id="different" className="py-10 scroll-mt-24">
     <div className="mx-auto max-w-7xl px-6">
-      <div className="flex items-center gap-2 text-white/60 text-xs">
-        <Eye className="h-4 w-4 text-cyan-300/80" />
-        <span>What makes it different</span>
-      </div>
       <h2 className="mt-3 text-2xl md:text-3xl font-semibold text-white">What makes it different</h2>
       <p className="mt-3 italic text-white/70">Other tools give outputs. iceOS makes thinking a design material.</p>
       <ul className="mt-3 list-disc pl-5 space-y-1 text-white/70">
@@ -115,10 +110,6 @@ const WhatMakesItDifferent = () => (
 const WhyItMatters = () => (
   <section id="why" className="py-10 scroll-mt-24">
     <div className="mx-auto max-w-7xl px-6">
-      <div className="flex items-center gap-2 text-white/60 text-xs">
-        <Eye className="h-4 w-4 text-cyan-300/80" />
-        <span>Why it matters now</span>
-      </div>
       <h3 className="mt-3 text-2xl md:text-3xl font-semibold text-white">Why it matters now</h3>
       <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">

@@ -24,7 +24,7 @@ export const content = {
       copySecondary: "The more we create, the smarter the network becomes.",
     },
     finalCta: {
-      title: "Be first.",
+      title: "Be first",
       copy:
         "We’re inviting a small group of creators to shape the future of intelligence. If you’ve ever wished your systems could think and act with your judgment — this is for you.",
       cta: "Join the Waitlist",
