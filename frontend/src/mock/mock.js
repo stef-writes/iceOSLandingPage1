@@ -8,31 +8,32 @@ export const content = {
     hero: {
       eyebrow: "iceOS",
       headline: "The Independent-Creator Environment",
-      subhead: "Build systems that think with your judgment.",
-      accent: "Commoditizing Expertise.",
+      subhead: "Turn your expertise into reusable systems. Design once, scale everywhere.",
+      accent: "Productizing Judgment.",
       cta: "Join the Waitlist",
     },
     what: {
-      title: "What It Is",
+      title: "Your Expertise, Productized",
       copy:
-        "Turn your expertise into living systems — testable, reusable, and composable — so your judgment runs on autopilot.",
+        "Capture decision frameworks and creative processes as reusable blueprints. What makes your thinking unique becomes your most valuable asset.",
     },
     why: {
-      title: "Why It Matters",
-      eyebrow: "Expertise, Commoditized.",
-      copyPrimary: "Everyone gets to build intelligence.",
-      copySecondary: "The more we create, the smarter the network becomes.",
+      title: "Why This Matters Now",
+      eyebrow: "",
+      copyPrimary: "Scale Your Impact — Reach more people without more hours",
+      copySecondary: "Predictable Economics — Per-run pricing like cloud compute",
+      copyTertiary: "Own Your Stack — Build beyond platform constraints",
     },
     finalCta: {
-      title: "Be first",
+      title: "Build What Matters",
       copy:
-        "We’re inviting a small group of creators to shape the future of intelligence. If you’ve ever wished your systems could think and act with your judgment — this is for you.",
+        "We're inviting creators to shape the future of work. If you're ready to turn your expertise into scalable systems, join us.",
       cta: "Join the Waitlist",
     },
     demo: {
-      title: "Demo Video",
+      title: "See It in Action",
       status: "Coming Soon",
-      note: "Demo video — coming soon",
+      note: "",
     },
   },
 };

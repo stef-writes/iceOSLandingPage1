@@ -88,8 +88,8 @@ const Demo = () => (
 const WhatItIs = () => (
   <section id="what" className="py-10 scroll-mt-24">
     <div className="mx-auto max-w-7xl px-6">
-      <h2 className="text-2xl md:text-3xl font-semibold text-white">From nodes to systems</h2>
-      <p className="mt-3 text-white/70 max-w-3xl leading-relaxed">Design judgment — not just tasks — reproducible, shareable, and improvable.</p>
+      <h2 className="text-2xl md:text-3xl font-semibold text-white">Your Expertise, Productized</h2>
+      <p className="mt-3 text-white/70 max-w-3xl leading-relaxed">Capture decision frameworks and creative processes as reusable blueprints. What makes your thinking unique becomes your most valuable asset.</p>
     </div>
   </section>
 );
@@ -97,11 +97,12 @@ const WhatItIs = () => (
 const WhatMakesItDifferent = () => (
   <section id="different" className="py-10 scroll-mt-24">
     <div className="mx-auto max-w-7xl px-6">
-      <h2 className="mt-3 text-2xl md:text-3xl font-semibold text-white">What makes it different</h2>
-      <p className="mt-3 italic text-white/70">Other tools give outputs. iceOS makes thinking a design material.</p>
+      <h2 className="mt-3 text-2xl md:text-3xl font-semibold text-white">Beyond Task Automation</h2>
+      <p className="mt-3 italic text-white/70">Other tools give outputs. iceOS makes your judgment the product.</p>
       <ul className="mt-3 list-disc pl-5 space-y-1 text-white/70">
-        <li><span className="font-medium text-white/80">Network</span> → Designed systems can be shared, remixed, and scaled.</li>
-        <li><span className="font-medium text-white/80">Trust</span> → Designed thinking is inspectable, governed, and improvable.</li>
+        <li><span className="font-medium text-white/80">Reusable</span> → Build once, run anywhere</li>
+        <li><span className="font-medium text-white/80">Composable</span> → Combine systems to create new capabilities</li>
+        <li><span className="font-medium text-white/80">Governed</span> → Version control for your thinking</li>
       </ul>
     </div>
   </section>
@@ -110,19 +111,19 @@ const WhatMakesItDifferent = () => (
 const WhyItMatters = () => (
   <section id="why" className="py-10 scroll-mt-24">
     <div className="mx-auto max-w-7xl px-6">
-      <h3 className="mt-3 text-2xl md:text-3xl font-semibold text-white">Why it matters now</h3>
+      <h3 className="mt-3 text-2xl md:text-3xl font-semibold text-white">Why This Matters Now</h3>
       <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
-          <div className="text-white font-medium">Composability</div>
-          <p className="mt-1 text-white/70 text-sm">Mix workflows and philosophies to create new capabilities.</p>
+          <div className="text-white font-medium">Scale Your Impact</div>
+          <p className="mt-1 text-white/70 text-sm">Reach more people without more hours.</p>
         </div>
         <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
-          <div className="text-white font-medium">Cost clarity</div>
-          <p className="mt-1 text-white/70 text-sm">Like cloud compute — predictable, per-run economics.</p>
+          <div className="text-white font-medium">Predictable Economics</div>
+          <p className="mt-1 text-white/70 text-sm">Per-run pricing like cloud compute.</p>
         </div>
         <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
-          <div className="text-white font-medium">Influence Intelligence</div>
-          <p className="mt-1 text-white/70 text-sm">Generate the judgment you value.</p>
+          <div className="text-white font-medium">Own Your Stack</div>
+          <p className="mt-1 text-white/70 text-sm">Build beyond platform constraints.</p>
         </div>
       </div>
     </div>
@@ -146,14 +147,14 @@ const Waitlist = () => {
       setSaving(true);
       const payload = { email, role: role || undefined, usecase: usecase || undefined, hp: hp || undefined };
       await createWaitlist(payload);
-      toast.success("You're on the list ✨");
+      toast.success("You're on the list! ✨");
       setEmail("");
       setRole("");
       setUsecase("");
       setHp("");
     } catch (err) {
       const status = err?.response?.status;
-      const msg = status === 409 ? "You're already on the list." : (err?.response?.data?.detail || "Something went wrong. Please try again.");
+      const msg = status === 409 ? "You're already signed up" : (err?.response?.data?.detail || "Something went wrong");
       toast.error(String(msg));
     } finally {
       setSaving(false);
@@ -186,17 +187,18 @@ const Waitlist = () => {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="role" className="text-white/80">Role</Label>
+                <Label htmlFor="role" className="text-white/80">What you do</Label>
                 <Select value={role} onValueChange={setRole}>
                   <SelectTrigger id="role" className="bg-black/40 border-white/10 text-white focus-visible:ring-cyan-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0b0d0e]">
-                    <SelectValue placeholder="Select a role" />
+                    <SelectValue placeholder="Select your role" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#0b0d0e] text-white border-white/10">
                     {[
                       "Founder / Creator",
-                      "Operator / Ops",
+                      "Operator",
                       "Engineer",
-                      "System Designer",
+                      "Consultant",
+                      "Designer",
                       "Other",
                     ].map((r) => (
                       <SelectItem key={r} value={r}>{r}</SelectItem>
@@ -205,12 +207,12 @@ const Waitlist = () => {
                 </Select>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="usecase" className="text-white/80">What will you build?</Label>
+                <Label htmlFor="usecase" className="text-white/80">What expertise would you turn into a system?</Label>
                 <Textarea
                   id="usecase"
                   value={usecase}
                   onChange={(e) => setUsecase(e.target.value)}
-                  placeholder="Briefly describe your system or judgment you want to scale"
+                  placeholder="What expertise would you turn into a system?"
                   className="min-h-[96px] bg-black/40 border-white/10 text-white placeholder:text-white/40 focus-visible:ring-cyan-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0b0d0e]"
                 />
               </div>
