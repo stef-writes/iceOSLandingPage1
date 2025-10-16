@@ -16,7 +16,7 @@ export default function Learn() {
       <Nav />
       <main className="relative pt-28 md:pt-32 pb-16">
         <section className="mx-auto max-w-7xl px-6">
-          <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-white">Learn More</h1>
+          <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-white">How It Works</h1>
           <p className="mt-3 text-white/70 max-w-3xl">A simple, image-only gallery to preview flows. Replace these placeholders with your real diagrams or screenshots when ready.</p>
         </section>
 

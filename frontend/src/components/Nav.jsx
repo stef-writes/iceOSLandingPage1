@@ -10,6 +10,7 @@ export default function Nav() {
   const location = useLocation();
   const isHome = location.pathname === "/";
   const isLearn = location.pathname === "/learn";
+  const isVision = location.pathname === "/vision";
   const linkBase = "transition-colors hover:underline underline-offset-4 decoration-white/30";
 
   return (
@@ -23,6 +24,7 @@ export default function Nav() {
         <div className="hidden md:flex items-center gap-7 text-sm text-white/70">
           <Link to="/" className={`${linkBase} ${isHome ? "text-white" : "hover:text-white"}`}>Home</Link>
           <Link to="/learn" className={`${linkBase} ${isLearn ? "text-white" : "hover:text-white"}`}>Learn</Link>
+          <Link to="/vision" className={`${linkBase} ${isVision ? "text-white" : "hover:text-white"}`}>Vision</Link>
         </div>
 
         <div className="flex items-center gap-3">
