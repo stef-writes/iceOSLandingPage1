@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -15,7 +15,7 @@ body {
 }
 
 code {
-    font-family: "Space Grotesk", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 /* Theme tokens */
@@ -76,10 +76,21 @@ code {
 
   /* ice theme override for accents */
   .theme-ice {
-    --primary: 188 84% 45%; /* cyan-teal for CTAs */
+    /* ALBUS core palette */
+    /* Background: Obsidian Plum #0C0812 → hsl(264 39% 5%) */
+    --background: 264 39% 5%;
+    --foreground: 230 20% 97%; /* Lucid White #F7F8FF-ish */
+
+    /* Primary Accent: Neural Magenta #AE3CE0 → hsl(282 72% 56%) */
+    --primary: 282 72% 56%;
     --primary-foreground: 0 0% 100%;
-    --accent: 188 84% 45%;
+
+    /* Secondary/Accent: Cerebral Violet #6E3AFF → hsl(256 100% 61%) */
+    --accent: 256 100% 61%;
     --accent-foreground: 0 0% 10%;
+
+    /* Muted/Secondary Text: Fog Gray #B1B3C9 → hsl(235 18% 74%) */
+    --muted-foreground: 235 18% 74%;
   }
 }
 

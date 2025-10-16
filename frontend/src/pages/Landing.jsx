@@ -26,15 +26,15 @@ const Hero = () => {
     <section id="top" className="relative pt-28 md:pt-32 pb-10 motion-safe:animate-fade-in-up">
       {/* Decorative layers */}
       <div className="absolute inset-0 -z-10">
-        <div className="pointer-events-none absolute -top-24 right-0 h-80 w-80 rounded-full blur-3xl bg-cyan-400/20" />
-        <div className="pointer-events-none absolute bottom-0 -left-20 h-72 w-72 rounded-full blur-3xl bg-teal-500/10" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1000px_400px_at_80%_0%,rgba(34,211,238,0.10),transparent)]" />
+        <div className="pointer-events-none absolute -top-24 right-0 h-80 w-80 rounded-full blur-3xl bg-[rgba(174,60,224,0.2)]" />
+        <div className="pointer-events-none absolute bottom-0 -left-20 h-72 w-72 rounded-full blur-3xl bg-[rgba(110,58,255,0.1)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1000px_400px_at_80%_0%,rgba(174,60,224,0.10),transparent)]" />
       </div>
 
       <div className="mx-auto max-w-7xl px-6">
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 backdrop-blur-2xl text-xs text-white/70">
-            <Zap className="h-3.5 w-3.5 text-cyan-300" />
+            <Zap className="h-3.5 w-3.5 text-[#AE3CE0]" />
             {content.sections.hero.eyebrow}
           </div>
           <h1 className="mt-5 text-4xl md:text-6xl font-semibold tracking-tight text-white">
@@ -51,7 +51,7 @@ const Hero = () => {
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
             <a href="#cta">
-              <Button className="group h-11 px-5 bg-cyan-500 hover:bg-cyan-400 text-white shadow-[0_8px_30px_rgba(34,211,238,0.25)] focus-visible:ring-cyan-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0b0d0e]">
+              <Button className="group h-11 px-5 bg-[#AE3CE0] hover:bg-[#9b2fd1] text-white shadow-[0_8px_30px_rgba(174,60,224,0.28)] focus-visible:ring-[#AE3CE0] focus-visible:ring-offset-1 focus-visible:ring-offset-[#0C0812]">
                 {content.sections.hero.cta}
                 <ArrowRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-0.5" />
               </Button>
@@ -69,7 +69,7 @@ const Demo = () => (
       <Card className="bg-white/5 border-white/10 backdrop-blur-2xl">
         <CardHeader className="flex flex-row items-center justify-between p-6">
           <CardTitle className="text-white/90 flex items-center gap-2">
-            <Play className="h-4 w-4 text-cyan-300" /> {content.sections.demo.title}
+            <Play className="h-4 w-4 text-[#AE3CE0]" /> {content.sections.demo.title}
             <span className="ml-2 text-xs text-white/50">{content.sections.demo.status.replace('-', ' ')}</span>
           </CardTitle>
         </CardHeader>
@@ -219,7 +219,7 @@ const Waitlist = () => {
               <Button
                 type="submit"
                 disabled={saving}
-                className="h-11 bg-cyan-500 hover:bg-cyan-400 text-white shadow-[0_8px_30px_rgba(34,211,238,0.25)] focus-visible:ring-cyan-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0b0d0e]">
+                className="h-11 bg-[#AE3CE0] hover:bg-[#9b2fd1] text-white shadow-[0_8px_30px_rgba(174,60,224,0.28)] focus-visible:ring-[#AE3CE0] focus-visible:ring-offset-1 focus-visible:ring-offset-[#0C0812]">
                 {saving ? "Joining…" : content.sections.finalCta.cta}
                 {!saving && <ArrowRight className="h-4 w-4 ml-1" />}
               </Button>
@@ -235,7 +235,7 @@ const Footer = () => (
   <footer className="mt-8 border-t border-white/10">
     <div className="mx-auto max-w-7xl px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-3 text-white/60 text-sm">
       <div className="flex items-center gap-2">
-        <div className="h-6 w-6 rounded-md bg-cyan-400/20 border border-cyan-300/30 grid place-items-center text-cyan-300">
+        <div className="h-6 w-6 rounded-md bg-[rgba(174,60,224,0.20)] border border-[rgba(174,60,224,0.30)] grid place-items-center text-[#AE3CE0]">
           <Brain className="h-3.5 w-3.5" />
         </div>
         <span>© {new Date().getFullYear()} iceOS</span>
@@ -254,9 +254,9 @@ export default function Landing() {
   }, []);
 
   return (
-    <div className="dark theme-ice min-h-screen bg-[#0b0d0e] text.white">
+    <div className="dark theme-ice min-h-screen bg-[#0C0812] text.white">
       {/* page bg subtle noise and grid */}
-      <div className="fixed inset-0 -z-20 bg-[radial-gradient(1200px_500px_at_80%_-10%,rgba(34,211,238,0.08),transparent)]" />
+      <div className="fixed inset-0 -z-20 bg-[radial-gradient(1200px_500px_at_80%_-10%,rgba(174,60,224,0.10),transparent)]" />
       <Nav />
       <main className="relative">
         <Hero />

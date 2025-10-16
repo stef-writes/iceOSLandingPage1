@@ -10,10 +10,10 @@ export default function Nav() {
   const linkBase = "transition-colors hover:underline underline-offset-4 decoration-white/30";
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-[rgba(10,12,14,0.5)] border-b border-white/10">
+    <div className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-[rgba(12,8,18,0.6)] border-b border-white/10">
       <div className="mx-auto max-w-7xl px-6 py-3 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <div className="h-7 w-7 rounded-md bg-cyan-400/20 border border-cyan-300/30 grid place-items-center text-cyan-300">
+          <div className="h-7 w-7 rounded-md bg-[rgba(174,60,224,0.20)] border border-[rgba(174,60,224,0.30)] grid place-items-center text-[#AE3CE0]">
             <Brain className="h-4 w-4" />
           </div>
           <span className="text-sm font-semibold tracking-wider text-white/90">iceOS</span>
@@ -26,7 +26,7 @@ export default function Nav() {
 
         <div className="flex items-center gap-3">
           <a href="/#cta">
-            <Button className="h-9 px-4 bg-cyan-500 text-white hover:bg-cyan-400 shadow-[0_8px_30px_rgba(34,211,238,0.25)] focus-visible:ring-cyan-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0b0d0e]">
+            <Button className="h-9 px-4 bg-[#AE3CE0] text-white hover:bg-[#9b2fd1] shadow-[0_8px_30px_rgba(174,60,224,0.28)] focus-visible:ring-[#AE3CE0] focus-visible:ring-offset-1 focus-visible:ring-offset-[#0C0812]">
               Join Waitlist
             </Button>
           </a>
