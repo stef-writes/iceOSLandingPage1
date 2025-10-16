@@ -13,13 +13,8 @@ import { content } from "../mock/mock";
 import { createWaitlist } from "../lib/api";
 import { Link, useLocation } from "react-router-dom";
 import Nav from "../components/Nav";
-import {
-  ArrowRight,
-  Brain,
-  Zap,
-  Mail,
-  Play,
-} from "lucide-react";
+import { ArrowRight, Brain, Zap, Mail, Play } from "lucide-react";
+import Logo from "../components/Logo";
 
 
 const Hero = () => {
@@ -239,9 +234,7 @@ const Footer = () => (
   <footer className="mt-8 border-t border-white/10">
     <div className="mx-auto max-w-7xl px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-3 text-white/60 text-sm">
       <div className="flex items-center gap-2">
-        <div className="h-6 w-6 rounded-md bg-[rgba(174,60,224,0.20)] border border-[rgba(174,60,224,0.30)] grid place-items-center text-[#AE3CE0]">
-          <Brain className="h-3.5 w-3.5" />
-        </div>
+        <Logo size={24} className="rounded" tone="onDark" />
         <span>© {new Date().getFullYear()} ALBUS</span>
       </div>
     </div>
