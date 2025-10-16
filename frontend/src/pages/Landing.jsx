@@ -13,7 +13,7 @@ import { content } from "../mock/mock";
 import { createWaitlist } from "../lib/api";
 import { Link, useLocation } from "react-router-dom";
 import Nav from "../components/Nav";
-import { ArrowRight, Brain, Zap, Mail, Play } from "lucide-react";
+import { ArrowRight, Brain, Mail, Play } from "lucide-react";
 import Logo from "../components/Logo";
 
 
@@ -28,13 +28,12 @@ const Hero = () => {
       </div>
 
       <div className="mx-auto max-w-7xl px-6">
-        <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 backdrop-blur-2xl text-xs text-white/70">
-            <Zap className="h-3.5 w-3.5 text-[hsl(var(--primary))]" />
-            <span className="rounded-full px-2 py-0.5 bg-[hsl(var(--product)/0.12)] text-[hsl(var(--product))] border border-[hsl(var(--product)/0.30)]">iceOS</span>
-            <span className="text-white/60">by ALBUS</span>
+        <div className="max-w-4xl lg:max-w-5xl">
+          <div className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-1.5 backdrop-blur-2xl text-sm">
+            <span className="text-white/70">Introducing…</span>
+            <span className="ml-2 font-medium tracking-wide text-white/90">iceOS</span>
           </div>
-          <h1 className="mt-5 text-4xl md:text-6xl font-semibold tracking-tight text-white">
+          <h1 className="mt-5 text-4xl md:text-6xl font-semibold tracking-tight text-white md:whitespace-nowrap">
             {content.sections.hero.headline}
           </h1>
           <p className="mt-4 text-lg md:text-xl text-white/70">
