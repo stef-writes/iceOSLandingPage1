@@ -76,21 +76,32 @@ code {
 
   /* ice theme override for accents */
   .theme-ice {
-    /* ALBUS core palette */
-    /* Background: Obsidian Plum #0C0812 → hsl(264 39% 5%) */
-    --background: 264 39% 5%;
-    --foreground: 230 20% 97%; /* Lucid White #F7F8FF-ish */
+    /* ALBUS × iceOS palette (HSL tokens) */
+    /* Base */
+    /* Carbon Void #070709 */
+    --background: 240 10% 3%;
+    /* Panel / Card base #1A1B20 */
+    --card: 230 12% 11%;
+    --card-foreground: 210 25% 97%;
 
-    /* Primary Accent: Neural Magenta #AE3CE0 → hsl(282 72% 56%) */
-    --primary: 282 72% 56%;
-    --primary-foreground: 0 0% 100%;
+    /* Text */
+    /* Lucid White #F5F7FA */
+    --foreground: 210 25% 97%;
+    /* Fog Gray #B1B3C9 */
+    --muted-foreground: 232 17% 76%;
 
-    /* Secondary/Accent: Cerebral Violet #6E3AFF → hsl(256 100% 61%) */
-    --accent: 256 100% 61%;
+    /* Accents */
+    /* Prismic Magenta #C63AF4 */
+    --primary: 284 88% 60%;
+    --primary-foreground: 0 0% 10%;
+    /* Cryo Azure #46BDF4 */
+    --accent: 199 87% 61%;
     --accent-foreground: 0 0% 10%;
+    /* Product accent (iceOS) */
+    --product: 199 87% 61%;
 
-    /* Muted/Secondary Text: Fog Gray #B1B3C9 → hsl(235 18% 74%) */
-    --muted-foreground: 235 18% 74%;
+    /* Optional gradient var (hex-based usage) */
+    --albus-iceos-gradient: linear-gradient(135deg, #C63AF4 0%, #46BDF4 100%);
   }
 }
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "../components/ui/button";
+import { GradientBorderButton, PrimaryButton } from "../components/ui/brand-buttons";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
@@ -26,16 +27,17 @@ const Hero = () => {
     <section id="top" className="relative pt-28 md:pt-32 pb-10 motion-safe:animate-fade-in-up">
       {/* Decorative layers */}
       <div className="absolute inset-0 -z-10">
-        <div className="pointer-events-none absolute -top-24 right-0 h-80 w-80 rounded-full blur-3xl bg-[rgba(174,60,224,0.2)]" />
-        <div className="pointer-events-none absolute bottom-0 -left-20 h-72 w-72 rounded-full blur-3xl bg-[rgba(110,58,255,0.1)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1000px_400px_at_80%_0%,rgba(174,60,224,0.10),transparent)]" />
+        <div className="pointer-events-none absolute -top-24 right-0 h-80 w-80 rounded-full blur-3xl bg-[hsl(var(--primary)/0.20)]" />
+        <div className="pointer-events-none absolute bottom-0 -left-20 h-72 w-72 rounded-full blur-3xl bg-[hsl(var(--accent)/0.10)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1000px_400px_at_80%_0%,hsl(var(--primary)/0.10),transparent)]" />
       </div>
 
       <div className="mx-auto max-w-7xl px-6">
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 backdrop-blur-2xl text-xs text-white/70">
-            <Zap className="h-3.5 w-3.5 text-[#AE3CE0]" />
-            {content.sections.hero.eyebrow}
+            <Zap className="h-3.5 w-3.5 text-[hsl(var(--primary))]" />
+            <span className="rounded-full px-2 py-0.5 bg-[hsl(var(--product)/0.12)] text-[hsl(var(--product))] border border-[hsl(var(--product)/0.30)]">iceOS</span>
+            <span className="text-white/60">by ALBUS</span>
           </div>
           <h1 className="mt-5 text-4xl md:text-6xl font-semibold tracking-tight text-white">
             {content.sections.hero.headline}
@@ -51,10 +53,10 @@ const Hero = () => {
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
             <a href="#cta">
-              <Button className="group h-11 px-5 bg-[#AE3CE0] hover:bg-[#9b2fd1] text-white shadow-[0_8px_30px_rgba(174,60,224,0.28)] focus-visible:ring-[#AE3CE0] focus-visible:ring-offset-1 focus-visible:ring-offset-[#0C0812]">
+              <GradientBorderButton className="group h-11 px-5">
                 {content.sections.hero.cta}
                 <ArrowRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-0.5" />
-              </Button>
+              </GradientBorderButton>
             </a>
           </div>
         </div>
@@ -66,16 +68,16 @@ const Hero = () => {
 const Demo = () => (
   <section id="demo" className="py-10 motion-safe:animate-fade-in-up scroll-mt-24">
     <div className="mx-auto max-w-7xl px-6">
-      <Card className="bg-white/5 border-white/10 backdrop-blur-2xl">
+      <Card className="bg-card border-white/10 backdrop-blur-2xl shadow-glass">
         <CardHeader className="flex flex-row items-center justify-between p-6">
           <CardTitle className="text-white/90 flex items-center gap-2">
-            <Play className="h-4 w-4 text-[#AE3CE0]" /> {content.sections.demo.title}
+            <Play className="h-4 w-4 text-[#6FD6FF]" /> {content.sections.demo.title}
             <span className="ml-2 text-xs text-white/50">{content.sections.demo.status.replace('-', ' ')}</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="pb-6 px-6">
           <AspectRatio ratio={16/9}>
-            <div className="w-full h-full grid place-items-center rounded-lg border border-white/10 bg-gradient-to-b from-white/5 to-transparent text-white/70">
+            <div className="w-full h-full grid place-items-center rounded-lg border border-white/10 bg-card text-white/70">
               {content.sections.demo.note}
             </div>
           </AspectRatio>
@@ -84,6 +86,8 @@ const Demo = () => (
     </div>
   </section>
 );
+
+// Relation band removed for a cleaner, more subtle hierarchy
 
 const WhatItIs = () => (
   <section id="what" className="py-10 scroll-mt-24">
@@ -113,15 +117,15 @@ const WhyItMatters = () => (
     <div className="mx-auto max-w-7xl px-6">
       <h3 className="mt-3 text-2xl md:text-3xl font-semibold text-white">Why This Matters Now</h3>
       <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
+        <div className="rounded-lg border border-white/10 bg-card shadow-glass p-4">
           <div className="text-white font-medium">Scale Your Impact</div>
           <p className="mt-1 text-white/70 text-sm">Reach more people without more hours.</p>
         </div>
-        <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
+        <div className="rounded-lg border border-white/10 bg-card shadow-glass p-4">
           <div className="text-white font-medium">Predictable Economics</div>
           <p className="mt-1 text-white/70 text-sm">Per-run pricing like cloud compute.</p>
         </div>
-        <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
+        <div className="rounded-lg border border-white/10 bg-card shadow-glass p-4">
           <div className="text-white font-medium">Own Your Stack</div>
           <p className="mt-1 text-white/70 text-sm">Build beyond platform constraints.</p>
         </div>
@@ -216,13 +220,13 @@ const Waitlist = () => {
                   className="min-h-[96px] bg-black/40 border-white/10 text-white placeholder:text-white/40 focus-visible:ring-cyan-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0b0d0e]"
                 />
               </div>
-              <Button
+              <GradientBorderButton
                 type="submit"
                 disabled={saving}
-                className="h-11 bg-[#AE3CE0] hover:bg-[#9b2fd1] text-white shadow-[0_8px_30px_rgba(174,60,224,0.28)] focus-visible:ring-[#AE3CE0] focus-visible:ring-offset-1 focus-visible:ring-offset-[#0C0812]">
+                className="h-11">
                 {saving ? "Joining…" : content.sections.finalCta.cta}
                 {!saving && <ArrowRight className="h-4 w-4 ml-1" />}
-              </Button>
+              </GradientBorderButton>
             </div>
           </form>
         </div>
@@ -238,7 +242,7 @@ const Footer = () => (
         <div className="h-6 w-6 rounded-md bg-[rgba(174,60,224,0.20)] border border-[rgba(174,60,224,0.30)] grid place-items-center text-[#AE3CE0]">
           <Brain className="h-3.5 w-3.5" />
         </div>
-        <span>© {new Date().getFullYear()} iceOS</span>
+        <span>© {new Date().getFullYear()} ALBUS</span>
       </div>
     </div>
   </footer>

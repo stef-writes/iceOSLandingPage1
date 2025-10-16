@@ -1,0 +1,10 @@
+{
+  "name": "iceos-root",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix frontend start",
+    "build": "npm --prefix frontend run build",
+    "preview": "npx --yes serve -s frontend/build -l 3020"
+  }
+}
+
