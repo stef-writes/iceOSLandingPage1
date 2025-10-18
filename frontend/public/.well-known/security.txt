@@ -1,0 +1,3 @@
+Contact: mailto:security@albus1.com
+Policy: https://albus1.com/security
+Preferred-Languages: en

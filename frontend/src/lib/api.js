@@ -1,9 +1,9 @@
 import axios from "axios";
 import { saveWaitlistEntry, getWaitlistEntries } from "../mock/mock";
 
-// Prefer env override, otherwise use same-origin relative /api (works on Vercel when rewrites are configured)
-const envBackendUrl = process.env.REACT_APP_BACKEND_URL?.trim();
-const API_BASE = envBackendUrl && envBackendUrl !== "" ? `${envBackendUrl.replace(/\/$/, "")}/api` : "/api";
+// Vite: use import.meta.env.VITE_API_BASE, default to /api for same-origin
+const envApiBase = (import.meta.env?.VITE_API_BASE || "").trim();
+const API_BASE = envApiBase && envApiBase !== "" ? envApiBase.replace(/\/$/, "") : "/api";
 const USE_MOCK = String(process.env.REACT_APP_USE_MOCK || "").toLowerCase() === "true";
 
 export const createWaitlist = async (payload) => {
