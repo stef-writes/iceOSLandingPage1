@@ -1,5 +1,9 @@
 {
   "version": 2,
+  "builds": [
+    { "src": "frontend/package.json", "use": "@vercel/static-build", "config": { "distDir": "build" } },
+    { "src": "api/**/*.js", "use": "@vercel/node" }
+  ],
   "routes": [
     { "src": "^/api/waitlist/export\\.csv$", "dest": "api/waitlist/export.js" },
     { "src": "^/api/waitlist$", "dest": "api/waitlist/index.js" },
