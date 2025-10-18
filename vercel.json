@@ -12,9 +12,6 @@
 
     { "src": "^/(.*\\.(?:js|css|ico|png|jpg|jpeg|gif|svg|webp|txt|json|map|woff2?|ttf))$", "dest": "/$1" },
     { "src": "^(?!/api)(.*)$", "dest": "/index.html" }
-  ],
-  "redirects": [
-    { "source": "/favicon.ico", "destination": "/favicon.ico", "permanent": true }
   ]
 }
 
