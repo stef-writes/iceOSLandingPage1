@@ -19,7 +19,16 @@ function isRateLimited(ip, bucket) {
 // Keep a simple in-memory bucket per lambda instance
 const rateBucket = {};
 
+function setCommonHeaders(res) {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+  res.setHeader('Content-Security-Policy', "default-src 'none'");
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+}
+
 module.exports = async (req, res) => {
+  setCommonHeaders(res);
   if (req.method === 'OPTIONS') {
     res.status(204).end();
     return;

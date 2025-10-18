@@ -1,10 +1,11 @@
 {
   "name": "iceos-root",
   "private": true,
+  "engines": { "node": "18.x" },
   "scripts": {
-    "dev": "npm --prefix frontend start",
+    "dev": "npm --prefix frontend run dev",
     "build": "npm --prefix frontend run build",
-    "preview": "npx --yes serve -s frontend/build -l 3020"
+    "preview": "npx --yes serve -s frontend/dist -l 3020"
   }
 }
 
