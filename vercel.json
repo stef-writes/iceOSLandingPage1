@@ -5,11 +5,16 @@
     { "src": "api/**/*.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/(.*)", "status": 308, "headers": { "Location": "https://albus1.com/$1" }, "has": [{ "type": "host", "value": "www.albus1.com" }] },
-    { "src": "/api/.*", "dest": "/api/index.js" },
-    { "src": "/api/waitlist", "dest": "/api/waitlist.js" },
-    { "src": "/api/waitlist/export.csv", "dest": "/api/waitlist/export.js" },
-    { "src": "/(.*)", "dest": "/$1" }
+    { "src": "^/api/waitlist/export\\.csv$", "dest": "api/waitlist/export.js" },
+    { "src": "^/api/waitlist$", "dest": "api/waitlist.js" },
+    { "src": "^/api$", "dest": "api/index.js" },
+    { "src": "^/api/.*$", "dest": "api/index.js" },
+
+    { "src": "^/(.*\\.(?:js|css|ico|png|jpg|jpeg|gif|svg|webp|txt|json|map|woff2?|ttf))$", "dest": "/$1" },
+    { "src": "^(?!/api)(.*)$", "dest": "/index.html" }
+  ],
+  "redirects": [
+    { "source": "/favicon.ico", "destination": "/favicon.ico", "permanent": true }
   ]
 }
 
