@@ -4,14 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#000000" />
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
-    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), interest-cohort=()" />
-    <meta http-equiv="X-Frame-Options" content="DENY" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; connect-src 'self' https:; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; font-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
-    />
+    <!-- Security headers like X-Frame-Options and CSP should be set by the server, not via meta. Removed to avoid console warnings in dev. -->
     <meta name="description" content="iceOS — The Independent-Creator Environment" />
     <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
     <link rel="icon" href="/brand/favicon.png" sizes="32x32" />

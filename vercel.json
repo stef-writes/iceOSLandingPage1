@@ -6,10 +6,16 @@
   ],
   "routes": [
     { "src": "^/api/health$", "dest": "api/health.js" },
+    { "src": "^/api/waitlist/verify$", "dest": "api/waitlist/verify.js" },
+    { "src": "^/api/waitlist/invite$", "dest": "api/waitlist/invite.js" },
+    { "src": "^/api/waitlist/activate$", "dest": "api/waitlist/activate.js" },
     { "src": "^/api/waitlist/export\\.csv$", "dest": "api/waitlist/export.js" },
     { "src": "^/api/waitlist$", "dest": "api/waitlist/index.js" },
     { "src": "^/api$", "dest": "api/index.js" },
     { "src": "^/api/.*$", "dest": "api/index.js" },
+
+    { "src": "^/api/mock/seed$", "dest": "api/mock/seed.js" },
+    { "src": "^/api/mock/clear$", "dest": "api/mock/clear.js" },
 
     { "handle": "filesystem" },
 

@@ -132,6 +132,7 @@ const Waitlist = () => {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [usecase, setUsecase] = useState("");
+  const [keywords, setKeywords] = useState("");
   const [hp, setHp] = useState(""); // honeypot
   const [saving, setSaving] = useState(false);
 
@@ -143,12 +144,19 @@ const Waitlist = () => {
     }
     try {
       setSaving(true);
-      const payload = { email, role: role || undefined, usecase: usecase || undefined, hp: hp || undefined };
+      const payload = {
+        email,
+        role: role || undefined,
+        usecase: usecase || undefined,
+        keywords: keywords || undefined,
+        hp: hp || undefined,
+      };
       await createWaitlist(payload);
       toast.success("You're on the list! ✨");
       setEmail("");
       setRole("");
       setUsecase("");
+      setKeywords("");
       setHp("");
     } catch (err) {
       const status = err?.response?.status;
@@ -213,6 +221,18 @@ const Waitlist = () => {
                   placeholder="What expertise would you turn into a system?"
                   className="min-h-[96px] bg-black/40 border-white/10 text-white placeholder:text-white/40 focus-visible:ring-cyan-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0b0d0e]"
                 />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="keywords" className="text-white/80">Keywords (optional)</Label>
+                <Input
+                  id="keywords"
+                  type="text"
+                  value={keywords}
+                  onChange={(e) => setKeywords(e.target.value)}
+                  placeholder="e.g., ai, onboarding, seo"
+                  className="bg-black/40 border-white/10 text-white placeholder:text-white/40 focus-visible:ring-cyan-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#0b0d0e]"
+                />
+                <p className="text-xs text-white/50">Comma-separated; we also auto-extract from your description.</p>
               </div>
               <GradientBorderButton
                 type="submit"

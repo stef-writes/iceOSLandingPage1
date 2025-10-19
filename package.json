@@ -4,6 +4,7 @@
   "engines": { "node": "20.x" },
   "scripts": {
     "dev": "npm --prefix frontend run dev",
+    "dev:api": "node local-api-server.js",
     "build": "npm --prefix frontend run build",
     "preview": "npx --yes serve -s frontend/dist -l 3020"
   }

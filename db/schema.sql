@@ -25,11 +25,15 @@ create table if not exists public.waitlist_submissions (
   consent boolean not null default false,
   status text not null default 'pending',
   verify_token text unique,
-  verified_at timestamptz
+  verify_expires_at timestamptz,
+  verified_at timestamptz,
+  invite_token text unique,
+  invite_expires_at timestamptz
 );
 
 -- Helpful index for ordering by created_at
 create index if not exists idx_waitlist_created_at on public.waitlist_submissions (created_at desc);
+create index if not exists idx_waitlist_status on public.waitlist_submissions (status);
 
 -- Enable RLS (backend uses service role and bypasses policies)
 alter table public.waitlist_submissions enable row level security;
