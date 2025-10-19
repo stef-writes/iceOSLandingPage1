@@ -30,6 +30,7 @@ next-env.d.ts
 frontend/build/
 dist/
 dist
+/frontend/dist
 
 # Environment files (comprehensive coverage)
 
@@ -60,7 +61,6 @@ chainlit.md
 .ac
 
 # Deployment
-.vercel
 
 # Data and databases
 agenthub/agents/youtube/db
