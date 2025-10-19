@@ -17,6 +17,7 @@ function AdminWaitlist() {
   const [keyword, setKeyword] = useState("");
   const [selected, setSelected] = useState({});
   const [busyId, setBusyId] = useState("");
+  const [autoSeeded, setAutoSeeded] = useState(false);
 
   const csvUrl = useMemo(() => {
     const base = import.meta.env?.VITE_API_BASE || "/api";
@@ -42,7 +43,20 @@ function AdminWaitlist() {
       const resp = await fetch(url);
       if (!resp.ok) throw new Error(`Fetch failed: ${resp.status}`);
       const data = await resp.json();
-      setEntries(Array.isArray(data) ? data : []);
+      const arr = Array.isArray(data) ? data : [];
+      setEntries(arr);
+      if (!autoSeeded && arr.length === 0) {
+        // Dev fallback: try seeding mock data once if backend returns empty
+        try {
+          await fetch(`${base}/mock/seed`, { method: 'POST' });
+          setAutoSeeded(true);
+          const resp2 = await fetch(url);
+          if (resp2.ok) {
+            const data2 = await resp2.json();
+            setEntries(Array.isArray(data2) ? data2 : []);
+          }
+        } catch {}
+      }
     } catch (e) {
       setError(e?.message || "Failed to load");
     } finally {
