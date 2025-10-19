@@ -1,7 +1,7 @@
 const http = require('http');
 const { URL } = require('url');
 
-// Import Vercel-style handlers
+// Import API handlers
 const apiRoot = require('./api/index.js');
 const health = require('./api/health.js');
 const waitlist = require('./api/waitlist/index.js');
@@ -43,7 +43,7 @@ function readBody(req) {
 }
 
 function wrapResponse(res) {
-  // Add minimal Express-like helpers so Vercel-style handlers work locally
+  // Add minimal Express-like helpers so handlers work locally
   res.status = function (code) {
     res.statusCode = code;
     return {
