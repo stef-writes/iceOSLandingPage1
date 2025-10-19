@@ -13,10 +13,12 @@ const mockSeed = require('./api/mock/seed.js');
 const mockClear = require('./api/mock/clear.js');
 
 const PORT = parseInt(process.env.PORT || '3000', 10);
-const CORS_ORIGIN = process.env.CORS_ORIGIN || '*';
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || process.env.CORS_ORIGIN || '';
 
 function setCors(res) {
-  res.setHeader('Access-Control-Allow-Origin', CORS_ORIGIN);
+  const isProd = (process.env.NODE_ENV || '').toLowerCase() === 'production';
+  const origin = FRONTEND_ORIGIN || (isProd ? '' : '*');
+  res.setHeader('Access-Control-Allow-Origin', origin || '*');
   res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Admin-Key, Authorization');

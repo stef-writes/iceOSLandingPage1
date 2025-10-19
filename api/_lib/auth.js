@@ -1,13 +1,14 @@
 function isAuthorizedAdmin(req) {
   const ADMIN_KEY = process.env.ADMIN_KEY;
-  if (!ADMIN_KEY) return true; // allow when not configured (local/dev)
+  const isDev = (process.env.NODE_ENV || '').toLowerCase() !== 'production';
+  // In production, ADMIN_KEY must be set and validated. In dev, allow if not configured.
+  if (!ADMIN_KEY) return isDev ? true : false;
+
+  // Prefer header-only authentication
   const headerKey = req.headers['x-admin-key'];
   if (headerKey === ADMIN_KEY) return true;
-  try {
-    const url = new URL(req.url, 'http://localhost');
-    const queryKey = url.searchParams.get('key');
-    if (queryKey === ADMIN_KEY) return true;
-  } catch {}
+
+  // Allow Basic auth (admin:ADMIN_KEY) as a fallback
   const auth = req.headers['authorization'] || '';
   if (auth.startsWith('Basic ')) {
     try {

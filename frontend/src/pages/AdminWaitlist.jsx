@@ -3,12 +3,11 @@ import { toast } from "../hooks/use-toast";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "../components/ui/dropdown-menu";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../components/ui/tooltip";
 import { MoreHorizontal, Send, CheckCircle2, Archive as ArchiveIcon, RefreshCw, Filter as FilterIcon, Copy as CopyIcon } from "lucide-react";
-import { fetchWaitlist } from "../lib/api";
 import Nav from "../components/Nav";
-import { Toaster } from "../components/ui/toaster";
 
 function AdminWaitlist() {
   const [entries, setEntries] = useState([]);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [adminKey, setAdminKey] = useState("");
@@ -19,11 +18,11 @@ function AdminWaitlist() {
   const [busyId, setBusyId] = useState("");
   const [autoSeeded, setAutoSeeded] = useState(false);
 
+  // CSV download via header-only auth
   const csvUrl = useMemo(() => {
     const base = import.meta.env?.VITE_API_BASE || "/api";
-    const keyParam = adminKey ? `?key=${encodeURIComponent(adminKey)}` : "";
-    return `${base}/waitlist/export.csv${keyParam}`;
-  }, [adminKey]);
+    return `${base}/waitlist/export.csv`;
+  }, []);
 
   const [page, setPage] = useState(1);
   const pageSize = 50;
@@ -36,24 +35,31 @@ function AdminWaitlist() {
     try {
       const base = import.meta.env?.VITE_API_BASE || "/api";
       const params = new URLSearchParams();
-      if (adminKey) params.set("key", adminKey);
       if (status) params.set("status", status);
-      params.set("limit", "10000");
+      params.set("page", String(page));
+      params.set("pageSize", String(pageSize));
+      params.set("orderKey", sort.key);
+      params.set("orderDir", sort.dir);
       const url = `${base}/waitlist?${params.toString()}`;
-      const resp = await fetch(url);
+      const headers = {};
+      if (adminKey) headers["X-Admin-Key"] = adminKey;
+      const resp = await fetch(url, { headers });
       if (!resp.ok) throw new Error(`Fetch failed: ${resp.status}`);
       const data = await resp.json();
-      const arr = Array.isArray(data) ? data : [];
+      const arr = Array.isArray(data?.items) ? data.items : (Array.isArray(data) ? data : []);
       setEntries(arr);
+      setTotal(Number.isFinite(data?.total) ? data.total : arr.length);
       if (!autoSeeded && arr.length === 0) {
         // Dev fallback: try seeding mock data once if backend returns empty
         try {
           await fetch(`${base}/mock/seed`, { method: 'POST' });
           setAutoSeeded(true);
-          const resp2 = await fetch(url);
+          const resp2 = await fetch(url, { headers });
           if (resp2.ok) {
             const data2 = await resp2.json();
-            setEntries(Array.isArray(data2) ? data2 : []);
+            const arr2 = Array.isArray(data2?.items) ? data2.items : (Array.isArray(data2) ? data2 : []);
+            setEntries(arr2);
+            setTotal(Number.isFinite(data2?.total) ? data2.total : arr2.length);
           }
         } catch {}
       }
@@ -64,7 +70,7 @@ function AdminWaitlist() {
     }
   };
 
-  // Build visible list using client-side filters so results update immediately
+  // Build visible list using client-side filters so results update immediately (on current page)
   let visible = [...entries];
   if (status) visible = visible.filter((e) => e.status === status);
   if (search) {
@@ -90,9 +96,8 @@ function AdminWaitlist() {
     return dir === 'asc' ? cmp : -cmp;
   });
 
-  const toPaginate = sorted;
-  const totalPages = Math.max(1, Math.ceil(toPaginate.length / pageSize));
-  const pageItems = toPaginate.slice((page - 1) * pageSize, page * pageSize);
+  const pageItems = sorted; // already server-paginated
+  const totalPages = Math.max(1, Math.ceil((total || 0) / pageSize));
 
   const toggleAll = (checked) => {
     const next = {};
@@ -105,14 +110,15 @@ function AdminWaitlist() {
   const batch = async (kind) => {
     try {
       setBusyId("batch");
+      const scope = pageItems;
       if (kind === 'invite') {
-        for (const e of filtered) if (selected[e.id]) await invite(e.email);
+        for (const e of scope) if (selected[e.id]) await invite(e.email);
       } else if (kind === 'activate') {
-        for (const e of filtered) if (selected[e.id]) await activate(e.id);
+        for (const e of scope) if (selected[e.id]) await activate(e.id);
       } else if (kind === 'archive') {
-        for (const e of filtered) if (selected[e.id]) await archive(e.id);
+        for (const e of scope) if (selected[e.id]) await archive(e.id);
       } else if (kind === 'resend') {
-        for (const e of filtered) if (selected[e.id]) await resendVerification(e.id);
+        for (const e of scope) if (selected[e.id]) await resendVerification(e.id);
       }
       await load();
     } catch (e) {
@@ -252,17 +258,35 @@ function AdminWaitlist() {
       <main className="relative mx-auto max-w-7xl px-6 py-8 text-white">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-semibold text-white/90">Waitlist Admin</h1>
-          <a
-            href={csvUrl}
+          <button
+            onClick={async () => {
+              try {
+                const headers = {};
+                if (adminKey) headers['X-Admin-Key'] = adminKey;
+                const resp = await fetch(csvUrl, { headers });
+                if (!resp.ok) throw new Error('CSV download failed');
+                const blob = await resp.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'waitlist.csv';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+              } catch (e) {
+                toast({ title: 'Download failed', description: String(e) });
+              }
+            }}
             className="inline-flex items-center px-3 py-2 rounded border border-white/10 bg-white/5 text-white hover:bg-white/10"
           >
             Download CSV
-          </a>
+          </button>
         </div>
         <div className="flex items-center justify-between mt-3">
           <div className="flex items-center gap-2">
-            <button disabled={page<=1} onClick={() => setPage((p)=>Math.max(1,p-1))} className="text-xs px-2 py-1 rounded border border-white/10 bg-white/5 text-white hover:bg-white/10 disabled:opacity-50">Prev</button>
-            <button disabled={page>=totalPages} onClick={() => setPage((p)=>Math.min(totalPages,p+1))} className="text-xs px-2 py-1 rounded border border-white/10 bg-white/5 text-white hover:bg-white/10 disabled:opacity-50">Next</button>
+            <button disabled={page<=1 || loading} onClick={() => setPage((p)=>Math.max(1,p-1))} className="text-xs px-2 py-1 rounded border border-white/10 bg-white/5 text-white hover:bg-white/10 disabled:opacity-50">Prev</button>
+            <button disabled={page>=totalPages || loading} onClick={() => setPage((p)=>Math.min(totalPages,p+1))} className="text-xs px-2 py-1 rounded border border-white/10 bg-white/5 text-white hover:bg-white/10 disabled:opacity-50">Next</button>
           </div>
           <a
             href={`data:text/csv;charset=utf-8,${encodeURIComponent(`id,email,role,usecase,keywords,created_at,status,source,utm_source,utm_medium,utm_campaign,utm_term,utm_content` + "\n" + toPaginate.map(d => [d.id,d.email,d.role||'',String(d.usecase||'').replace(/\n/g,' '),(Array.isArray(d.keywords)?d.keywords.join('|'):''),d.created_at||'',d.status||'',d.source||'',d.utm_source||'',d.utm_medium||'',d.utm_campaign||'',d.utm_term||'',d.utm_content||''].join(',')).join('\n'))}`}
@@ -326,7 +350,7 @@ function AdminWaitlist() {
           <button key={s} onClick={() => setStatus(s)} className={`text-xs px-2 py-1 rounded border border-white/10 ${status===s? 'bg-white/20 text-white':'bg-white/5 text-white hover:bg-white/10'}`}>{s}</button>
         ))}
         <button onClick={() => setStatus('')} className={`text-xs px-2 py-1 rounded border border-white/10 ${status===''? 'bg-white/20 text-white':'bg-white/5 text-white hover:bg-white/10'}`}>all</button>
-        <div className="ml-auto text-xs text-white/60">{toPaginate.length} results • page {page}/{totalPages}</div>
+        <div className="ml-auto text-xs text-white/60">{total} total • page {page}/{totalPages}</div>
       </div>
 
         <div className="flex items-center gap-2 mb-3">
@@ -354,7 +378,7 @@ function AdminWaitlist() {
               <DropdownMenuItem disabled={!selectedIds.length || busyId==='batch'} onClick={() => batch('resend')}><RefreshCw className="w-4 h-4" /> Resend verification</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem disabled={!selectedIds.length} onClick={() => {
-                const emails = filtered.filter(e => selected[e.id]).map(e => e.email).join(', ');
+                const emails = pageItems.filter(e => selected[e.id]).map(e => e.email).join(', ');
                 navigator.clipboard?.writeText(emails).then(() => toast({ title: 'Emails copied'})).catch(() => window.prompt('Copy emails', emails));
               }}>
                 <CopyIcon className="w-4 h-4" /> Copy emails
@@ -468,7 +492,6 @@ function AdminWaitlist() {
           </table>
         </div>
       </main>
-      <Toaster />
     </div>
   );
 }

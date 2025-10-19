@@ -30,7 +30,7 @@ next-env.d.ts
 frontend/build/
 dist/
 dist
-/frontend/dist
+/frontend/dist/
 
 # Environment files (comprehensive coverage)
 

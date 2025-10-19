@@ -2,10 +2,32 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE = process.env.SUPABASE_SERVICE_ROLE || process.env.SUPABASE_SERVICE_ROLE_KEY;
 const REST_URL = `${SUPABASE_URL}/rest/v1`;
 const TABLE = 'waitlist_submissions';
+const ADMIN_KEY = process.env.ADMIN_KEY;
 
 module.exports = async (req, res) => {
   if (req.method !== 'GET') {
     res.status(405).send('Method Not Allowed');
+    return;
+  }
+  // Header-only admin auth
+  const isDev = (process.env.NODE_ENV || '').toLowerCase() !== 'production';
+  const headerKey = req.headers['x-admin-key'];
+  const auth = req.headers['authorization'] || '';
+  let ok = false;
+  if (ADMIN_KEY) {
+    if (headerKey === ADMIN_KEY) ok = true;
+    else if (auth.startsWith('Basic ')) {
+      try {
+        const decoded = Buffer.from(auth.slice(6), 'base64').toString('utf8');
+        const [user, pass] = decoded.split(':');
+        if ((user || '').toLowerCase() === 'admin' && pass === ADMIN_KEY) ok = true;
+      } catch {}
+    }
+  } else {
+    ok = isDev; // allow when not configured in dev only
+  }
+  if (!ok) {
+    res.status(401).send('Unauthorized');
     return;
   }
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE) {

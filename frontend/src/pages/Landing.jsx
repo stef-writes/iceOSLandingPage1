@@ -7,8 +7,7 @@ import { Textarea } from "../components/ui/textarea";
 import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { AspectRatio } from "../components/ui/aspect-ratio";
-import { Toaster } from "../components/ui/sonner";
-import { toast } from "sonner";
+import { toast } from "../hooks/use-toast";
 import { content } from "../mock/mock";
 import { createWaitlist } from "../lib/api";
 import { Link, useLocation } from "react-router-dom";
@@ -256,7 +255,7 @@ export default function Landing() {
   }, []);
 
   return (
-    <div className="dark theme-ice min-h-screen bg-[#0C0812] text.white">
+    <div className="dark theme-ice min-h-screen bg-[#0C0812] text-white">
       {/* page bg subtle noise and grid */}
       <div className="fixed inset-0 -z-20 bg-[radial-gradient(1200px_500px_at_80%_-10%,rgba(174,60,224,0.10),transparent)]" />
       <Nav />
@@ -269,7 +268,6 @@ export default function Landing() {
         <Waitlist />
       </main>
       <Footer />
-      <Toaster position="top-center" richColors closeButton />
     </div>
   );
 }

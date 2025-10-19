@@ -28,8 +28,9 @@ function setCommonHeaders(res) {
   res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
   res.setHeader('Content-Security-Policy', "default-src 'none'");
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
-  const origin = process.env.CORS_ORIGIN || '*';
-  res.setHeader('Access-Control-Allow-Origin', origin);
+  const isProd = (process.env.NODE_ENV || '').toLowerCase() === 'production';
+  const origin = process.env.FRONTEND_ORIGIN || process.env.CORS_ORIGIN || (isProd ? '' : '*');
+  res.setHeader('Access-Control-Allow-Origin', origin || '*');
   res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Admin-Key, Authorization');
@@ -41,17 +42,21 @@ module.exports = async (req, res) => {
     res.status(204).end();
     return;
   }
-  // Helper to check simple admin access via header or query string if ADMIN_KEY is configured
+  // Helper to check admin access via headers only (and require key in production)
   function isAuthorizedAdmin(req) {
-    if (!ADMIN_KEY) return true; // allow when not configured (e.g., local dev)
+    const isDev = (process.env.NODE_ENV || '').toLowerCase() !== 'production';
+    if (!ADMIN_KEY) return isDev ? true : false;
     const headerKey = req.headers['x-admin-key'];
-    try {
-      const url = new URL(req.url, 'http://localhost');
-      const queryKey = url.searchParams.get('key');
-      return headerKey === ADMIN_KEY || queryKey === ADMIN_KEY;
-    } catch {
-      return headerKey === ADMIN_KEY;
+    if (headerKey === ADMIN_KEY) return true;
+    const auth = req.headers['authorization'] || '';
+    if (auth.startsWith('Basic ')) {
+      try {
+        const decoded = Buffer.from(auth.slice(6), 'base64').toString('utf8');
+        const [user, pass] = decoded.split(':');
+        if ((user || '').toLowerCase() === 'admin' && pass === ADMIN_KEY) return true;
+      } catch {}
     }
+    return false;
   }
 
   if (req.method === 'GET') {
@@ -73,9 +78,17 @@ module.exports = async (req, res) => {
     try {
       const url = new URL(req.url, 'http://localhost');
       const status = url.searchParams.get('status');
-      const limit = Math.min(parseInt(url.searchParams.get('limit') || '500', 10) || 500, 10000);
-      let query = `${REST_URL}/${TABLE}?select=id,email,role,usecase,created_at,status,source,utm_source,utm_medium,utm_campaign,utm_term,utm_content,ip,user_agent&order=created_at.desc&limit=${limit}`;
-      if (status) query += `&status=eq.${encodeURIComponent(status)}`;
+      const page = Math.max(1, parseInt(url.searchParams.get('page') || '1', 10) || 1);
+      const pageSize = Math.min(Math.max(1, parseInt(url.searchParams.get('pageSize') || '50', 10) || 50), 500);
+      const orderKey = url.searchParams.get('orderKey') || 'created_at';
+      const orderDir = (url.searchParams.get('orderDir') || 'desc').toLowerCase() === 'asc' ? 'asc' : 'desc';
+      const offset = (page - 1) * pageSize;
+      // Build filters
+      const filters = [];
+      if (status) filters.push(`status=eq.${encodeURIComponent(status)}`);
+      // Build base query with count=exact for total
+      let query = `${REST_URL}/${TABLE}?select=id,email,role,usecase,keywords,created_at,status,source,utm_source,utm_medium,utm_campaign,utm_term,utm_content&order=${encodeURIComponent(orderKey)}.${orderDir}&limit=${pageSize}&offset=${offset}&count=exact`;
+      if (filters.length) query += `&${filters.join('&')}`;
       const resp = await fetch(query, {
         headers: {
           'apikey': SUPABASE_SERVICE_ROLE,
@@ -88,7 +101,16 @@ module.exports = async (req, res) => {
         return;
       }
       const rows = await resp.json();
-      res.status(200).json(rows);
+      // Supabase returns count in header if count=exact
+      const countHeader = resp.headers.get('content-range') || resp.headers.get('x-total-count') || '';
+      let total = undefined;
+      // content-range format: items start-end/total
+      const slashIdx = countHeader.lastIndexOf('/');
+      if (slashIdx >= 0) {
+        const t = parseInt(countHeader.slice(slashIdx + 1), 10);
+        if (!Number.isNaN(t)) total = t;
+      }
+      res.status(200).json({ items: rows, page, pageSize, total });
     } catch (e) {
       res.status(500).json({ detail: 'Unexpected error' });
     }
